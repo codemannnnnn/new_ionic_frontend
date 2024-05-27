@@ -36,3 +36,75 @@
     transform: rotate(360deg);
   }
 }
+
+.two-card {
+  /* display: flex; */
+}
+
+.card-padding-mid {
+  padding: 7%;
+}
+.card-padding-small {
+  padding: 3%;
+}
+
+.small-card {
+  width: 33%;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.margin-5 {
+  margin: 5%;
+}
+
+@media (max-width: 500px) {
+  .small-card {
+    width: 100%;
+  }
+}
+
+.split-two {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.split-radio {
+  display: flex;
+}
+
+/* radio button css */
+ion-radio::part(container) {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+
+ion-radio::part(mark) {
+  background: none;
+  transition: none;
+  transform: none;
+  border-radius: 0;
+}
+
+ion-radio.radio-checked::part(container) {
+  background: #0154e8;
+  border-color: transparent;
+}
+
+ion-radio.radio-checked::part(mark) {
+  width: 6px;
+  height: 10px;
+
+  border-width: 0px 2px 2px 0px;
+  border-style: solid;
+  border-color: #fff;
+
+  transform: rotate(45deg);
+}
