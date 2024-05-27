@@ -1,0 +1,172 @@
+import logo from "./logo.svg";
+import "./App.css";
+import "@ionic/react/css/core.css";
+// import { React, Suspense, useEffect, useState } from "react";
+
+import { useStore, useGrabUserInformation } from "./state/store";
+
+import {
+  IonApp,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  setupIonicReact,
+  IonHeader,
+  IonToolbar,
+  IonText,
+} from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import cookie from "js-cookie";
+
+import {
+  images,
+  square,
+  triangle,
+  homeOutline,
+  bookmarkOutline,
+  trailSignOutline,
+  logInOutline,
+  logOutOutline,
+} from "ionicons/icons";
+/* Core CSS required for Ionic components to work properly */
+import "@ionic/react/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+
+/* Optional CSS utils that can be commented out */
+// import "@ionic/react/css/padding.css";
+// import "@ionic/react/css/float-elements.css";
+// import "@ionic/react/css/text-alignment.css";
+// import "@ionic/react/css/text-transformation.css";
+// import "@ionic/react/css/flex-utils.css";
+// import "@ionic/react/css/display.css";
+/* Theme variables */
+// import "./theme/variables.css";
+
+//handle auth
+import { useAuthenticator } from "./customHooks/useAuthenticator";
+
+//components
+import { Header } from "./components/core_components/Header";
+import { Home } from "./components/core_components/Home";
+import { Dashboard } from "./components/core_components/Dashboard";
+import { Login } from "./components/core_components/Login";
+import { Signup } from "./components/core_components/Signup";
+import { Forms } from "./components/core_components/Forms";
+import { DarkModeToggle } from "./customHooks/DarkModeToggle";
+
+//react router
+import { Redirect, Route } from "react-router-dom";
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import { atomIsUserLoggedIn } from "./state/auth";
+
+setupIonicReact();
+
+function App() {
+  // const history = useHistory();
+
+  // const { checkIfUserIsLoggedIn } = useAuthenticator();
+
+  // //local state
+  // const [userTryingToLogin, setUserTryingToLogin] = useState(false);
+
+  //global state
+  // const [userData, setUserData] = useRecoilState(atomIsUserLoggedIn);
+
+  // useEffect(() => {
+  //   // console.log(userData);
+  //   // if (userData === false) {
+  //   checkIfUserIsLoggedIn();
+  //   // console.log(userData);
+  //   // }
+  // }, []);
+
+  //bring in your data
+  // useGrabUserInformation();
+
+  // const questions = useStore((e) => e.questions);
+  // const formData = useStore((e) => e.form);
+  // const userData = useStore((e) => e.user);
+  // console.log(questions);
+  // console.log({ formData });
+  // console.log({ userData });
+  // useGrabUserInformation();
+
+  // useEffect(() => {
+  //   if (!userData) {
+  //     // console.log(userData);
+  //     history.push("/");
+  //   }
+  // }, [userData]);
+
+  return (
+    <IonApp>
+      <IonHeader>
+        <IonToolbar>
+          <ion-title size={"large"}>360 Forklift Inspection</ion-title>
+        </IonToolbar>
+      </IonHeader>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route exact path="/forms">
+              <Forms />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/signup">
+              <Signup />
+            </Route>
+          </IonRouterOutlet>
+
+          <IonTabBar slot="bottom">
+            {/* <IonTabButton>
+              <DarkModeToggle />
+            </IonTabButton> */}
+            {/* <IonTabButton tab="home" href="/">
+              <IonIcon aria-hidden="true" icon={bookmarkOutline} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="dashboard" href="/dashboard">
+              <IonIcon aria-hidden="true" icon={bookmarkOutline} />
+              <IonLabel>Dashboard</IonLabel>
+            </IonTabButton> */}
+
+            <IonTabButton tab="forms" href="/forms">
+              <IonIcon aria-hidden="true" icon={homeOutline} />
+              <IonLabel>Forms</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="login" href="/login">
+              <IonIcon aria-hidden="true" icon={logInOutline} />
+              <IonLabel>Login</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="signuIonText" href="/signup">
+              <IonIcon aria-hidden="true" icon={trailSignOutline} />
+              <IonLabel>Signup</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="logout" href="/logout">
+              <IonIcon aria-hidden="true" icon={logOutOutline} />
+              <IonLabel>Logout</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
+  );
+}
+
+export default App;

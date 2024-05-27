@@ -1,0 +1,51 @@
+{
+  "user": {
+    "id": 1,
+    "username": "cody",
+    "password": "$2a$08$2Am/xmvAzVdMyS1iqV2NXO5X3ueQIxewSzSN2ZdM/t3v7PHJB/.pS",
+    "created_at": "2024-05-17T20:17:14.239Z",
+    "firstName": "cody",
+    "lastName": "branson",
+    "email": null,
+    "workPhone": null,
+    "cellPhone": null,
+    "title": null,
+    "role": null,
+    "role_id": null,
+    "security_group": null,
+    "security_group_id": null,
+    "organization": null,
+    "organization_id": 1,
+    "user_id": 1
+  },
+  "form": [
+    {
+      "data": {
+        "form_id": "c6c931d2-e791-43a1-a362-bf5d561e3ad4",
+        "title": "Sample Seed Form",
+        "form_type": "forklift",
+        "user_id": 1,
+        "organization_id": 1,
+        "form_template_id": "10f6e916-df19-46da-bb91-b2fe0f3e55ba",
+        "created_at": "2024-05-17T20:17:14.245Z"
+      },
+      "formQuestions": [
+        {
+          "question": "This is a sample question, for the seeds..."
+        },
+        {
+          "question": "Have you checked the battery?"
+        },
+        {
+          "question": "Have you checked the tires?"
+        },
+        {
+          "question": "Have you checked the wheels?"
+        },
+        {
+          "question": "Have you checked the balancer?"
+        }
+      ]
+    }
+  ]
+}
