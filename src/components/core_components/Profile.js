@@ -1,14 +1,8 @@
 import React from "react";
 
 import { logOutOutline } from "ionicons/icons";
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonLabel,
-  IonPage,
-} from "@ionic/react";
-import { Card, Input } from "antd";
+import { IonButton, IonIcon, IonPage } from "@ionic/react";
+import { Card } from "antd";
 import { useStore, useLogoutUser } from "../../state/store";
 import { useHistory } from "react-router-dom";
 

@@ -4,17 +4,12 @@ import { IonPage } from "@ionic/react";
 
 import { useHistory } from "react-router-dom";
 
-import {
-  useStore,
-  useLoginUser,
-  useRegisterUser,
-  useGrabUserInformation,
-} from "../../state/store";
-import { Form, Input, Button, Card, Space, Select } from "antd";
-import { v4 as uuidv4 } from "uuid";
-import { Signup } from "./Signup";
-import axios from "axios";
-const cookie = require("cookie");
+import { useLoginUser, useRegisterUser } from "../../state/store";
+import { Form, Input, Button, Card, Space } from "antd";
+// import { v4 as uuidv4 } from "uuid";
+// import { Signup } from "./Signup";
+// import axios from "axios";
+// const cookie = require("cookie");
 
 export const Login = () => {
   const history = useHistory();
@@ -23,7 +18,7 @@ export const Login = () => {
   const [pass, setPass] = useState("");
   const [LoginButtonSwitchView, setLoginButtonSwitchView] = useState("Signup");
   //env
-  const curEnv = process.env.REACT_APP_ENVIRONMENT;
+  // const curEnv = process.env.REACT_APP_ENVIRONMENT;
   const [loginForm] = Form.useForm();
   // const grabData = useGrabUserInformation();
   // const nav = useNavigate();

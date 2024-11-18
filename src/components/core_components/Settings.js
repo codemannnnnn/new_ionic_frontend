@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 
-import { settingsOutline } from "ionicons/icons";
-import { IonIcon, IonLabel, IonButton, IonPage } from "@ionic/react";
+import { IonPage } from "@ionic/react";
 import { Button, Form, Input, Space, Card, Select } from "antd";
-import moment from "moment";
+
 import { v4 as uuidv4 } from "uuid";
 
 import { postNewEquipmentData } from "../../customHooks/useUserUtils";
 import { InspectionModal } from "../form_components/InspectionModal";
-import { useStore, useGrabUserInformation } from "../../state/store";
+import { useStore } from "../../state/store";
 
 export const Settings = () => {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  // const [name, setName] = useState("");
+  // const [type, setType] = useState("");
   const userData = useStore((state) => state.userInfo);
 
   const [equipmentActive, setEquipmentActive] = useState("");

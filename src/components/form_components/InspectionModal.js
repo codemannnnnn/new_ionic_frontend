@@ -133,7 +133,7 @@ export const InspectionModal = () => {
 
     dataToArr.slice(2).forEach((e, idx) => {
       console.log(e);
-      const question = `question-${idx}`;
+      // const question = `question-${idx}`;
       const obj = {
         question: e[1],
         question_id: uuidv4(),

@@ -2,50 +2,50 @@ import React, { useState, useEffect } from "react";
 
 import { IonPage } from "@ionic/react";
 
-import { useStore, useRegisterUser } from "../../state/store";
+import { useRegisterUser } from "../../state/store";
 import { Form, Input, Button, Card, Space } from "antd";
 
 export const Signup = () => {
-  const [uName, setUname] = useState("");
-  const [pass, setPass] = useState("");
-  const [fName, setFname] = useState("");
-  const [lName, setLname] = useState("");
-  const [orgID, setOrgID] = useState("");
+  // const [uName, setUname] = useState("");
+  // const [pass, setPass] = useState("");
+  // const [fName, setFname] = useState("");
+  // const [lName, setLname] = useState("");
+  // const [orgID, setOrgID] = useState("");
 
-  const handleChange = (e) => {
-    const targetId = e.target.id;
-    const val = e.target.value;
-    if (targetId === "username") {
-      setUname(val);
-    }
-    if (targetId === "password") {
-      setPass(val);
-    }
-    if (targetId === "firstName") {
-      setFname(val);
-    }
-    if (targetId === "lastName") {
-      setLname(val);
-    }
-    if (targetId === "organization_id") {
-      setOrgID(val);
-    }
-  };
+  // const handleChange = (e) => {
+  //   const targetId = e.target.id;
+  //   const val = e.target.value;
+  //   if (targetId === "username") {
+  //     setUname(val);
+  //   }
+  //   if (targetId === "password") {
+  //     setPass(val);
+  //   }
+  //   if (targetId === "firstName") {
+  //     setFname(val);
+  //   }
+  //   if (targetId === "lastName") {
+  //     setLname(val);
+  //   }
+  //   if (targetId === "organization_id") {
+  //     setOrgID(val);
+  //   }
+  // };
 
   const registerUser = useRegisterUser();
 
-  const submitData = (e) => {
-    e.preventDefault();
-    const data = {
-      username: uName,
-      password: pass,
-      firstName: fName,
-      lastName: lName,
-      organization_id: orgID,
-    };
-    // console.log(data);
-    registerUser(data);
-  };
+  // const submitData = (e) => {
+  //   e.preventDefault();
+  //   const data = {
+  //     username: uName,
+  //     password: pass,
+  //     firstName: fName,
+  //     lastName: lName,
+  //     organization_id: orgID,
+  //   };
+  //   // console.log(data);
+  //   registerUser(data);
+  // };
   const [signupForm] = Form.useForm();
 
   const SubmitButton = ({ signupForm, children }) => {
