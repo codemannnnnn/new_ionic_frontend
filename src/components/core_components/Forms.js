@@ -1,7 +1,7 @@
-import { EquipmentGrid } from "../form_components/EquipmentGrid";
-import { InspectionForm } from "../form_components/InspectionForm";
-import { InspectionModal } from "../form_components/InspectionModal";
-import { FormsGrid } from "../form_components/FormsGrid";
+// import { EquipmentGrid } from "../form_components/EquipmentGrid";
+// import { InspectionForm } from "../form_components/InspectionForm";
+// import { InspectionModal } from "../form_components/InspectionModal";
+// import { FormsGrid } from "../form_components/FormsGrid";
 
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
@@ -9,24 +9,12 @@ import { v4 as uuidv4 } from "uuid";
 import {
   IonCard,
   IonContent,
-  IonTitle,
-  IonModal,
-  IonButton,
-  IonRow,
-  IonCol,
-  IonCardSubtitle,
   IonCardTitle,
   IonPage,
-  IonRoute,
-  IonToggle,
   IonRadioGroup,
   IonItem,
   IonLabel,
   IonRadio,
-  IonToolbar,
-  IonButtons,
-  IonIcon,
-  IonCheckbox,
 } from "@ionic/react";
 
 import axios from "axios";

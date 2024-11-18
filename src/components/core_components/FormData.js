@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { useStore, useGrabUserInformation } from "../../state/store";
+import { useStore } from "../../state/store";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
-import { create } from "zustand";
+// import { create } from "zustand";
 
 import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
 import { IonIcon } from "@ionic/react";
@@ -60,13 +60,13 @@ export const FormData = () => {
       if (userData.role_id === 2) {
         formData.reduce((acc, e) => {
           if (e.userInfo.user_id === userData.user_id) {
-            var { form_title, form_type, id, name, created_at } = e.data;
+            var { form_title, form_type, name, created_at } = e.data;
             var { firstName, lastName } = e.userInfo;
             created_at = created_at || "2024-08-09 16:36:00";
             firstName = firstName.toUpperCase();
             lastName = lastName.toUpperCase();
             name ? (name = name) : (name = "unknown");
-            const { form_id } = e.data;
+            // const { form_id } = e.data;
             const { formQuestions } = e;
 
             form_title = <h6>{form_title}</h6>;
@@ -96,6 +96,7 @@ export const FormData = () => {
                   </div>
                 );
               }
+              return;
             });
 
             created_at = moment(created_at).format("YYYY-MM-DD HH:mm:ss");
@@ -117,7 +118,7 @@ export const FormData = () => {
         formData.map((e, idx) => {
           // console.log(e);
           // try {
-          var { form_title, form_type, id, name, created_at } = e.data;
+          var { form_title, form_type, name, created_at } = e.data;
           var { firstName, lastName } = e.userInfo;
           // var { user_created_at } = e.formQuestions[0];
           created_at = created_at || "2024-08-09 16:36:00";
@@ -125,7 +126,7 @@ export const FormData = () => {
           lastName = lastName.toUpperCase();
           // console.log(e.equipmentData.name);
           name ? (name = name) : (name = "unknown");
-          const { form_id } = e.data;
+          // const { form_id } = e.data;
           const { formQuestions } = e;
           // console.log({ form_title });
 
@@ -168,13 +169,14 @@ export const FormData = () => {
             created_at: created_at,
             description: questionArr,
           });
+          return;
         });
       }
 
       setGridData(tempArr);
       setLoading(false); // Set loading to false after data is processed
     }
-  }, [formData]);
+  }, [formData, userData]);
 
   const columns = [
     {

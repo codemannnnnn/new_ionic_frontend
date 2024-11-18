@@ -1,40 +1,20 @@
 import React, { useState } from "react";
 
-import { Divider, Button, Drawer } from "antd";
-import {
-  IonHeader,
-  IonButton,
-  IonIcon,
-  IonModal,
-  IonList,
-  IonItem,
-} from "@ionic/react";
+// import { Divider, Button, Drawer } from "antd";
+import { IonHeader, IonButton, IonIcon } from "@ionic/react";
 import {
   personCircleOutline,
   settingsOutline,
   notificationsOutline,
 } from "ionicons/icons";
 
-import { Settings } from "./Settings";
-import { Notifications } from "./Notifications";
-import { Profile } from "./Profile";
+// import { Settings } from "./Settings";
+// import { Notifications } from "./Notifications";
+// import { Profile } from "./Profile";
 import { useHistory } from "react-router-dom";
 import white from "../../images/logo/white.png";
-import { Redirect, Route } from "react-router-dom";
-import { IonReactRouter } from "@ionic/react-router";
-import {
-  images,
-  ellipse,
-  square,
-  triangle,
-  homeOutline,
-  bookmarkOutline,
-  trailSignOutline,
-  logInOutline,
-  logOutOutline,
-  clipboardOutline,
-  appsOutline,
-} from "ionicons/icons";
+// import { Redirect, Route } from "react-router-dom";
+// import { IonReactRouter } from "@ionic/react-router";
 
 // import { Button } from "antd";
 export const Header = () => {

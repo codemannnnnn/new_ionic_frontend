@@ -1,22 +1,7 @@
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonFooter,
-  IonCardHeader,
-  IonCard,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonCardContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-} from "@ionic/react";
-import { call, person, settings } from "ionicons/icons";
+import { IonContent, IonPage } from "@ionic/react";
+// import { call, person, settings } from "ionicons/icons";
 
-import { useStore, useGrabUserInformation } from "../../state/store";
+import { useStore } from "../../state/store";
 
 import { FormData } from "./FormData";
 import { FormCards } from "./FormCards";

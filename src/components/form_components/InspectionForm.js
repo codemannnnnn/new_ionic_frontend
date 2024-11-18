@@ -1,37 +1,13 @@
 import React, { useState } from "react";
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from "recoil";
 
-import { PlusOutlined } from "@ant-design/icons";
-// import { fetchUserQuestions } from "../../dataStore/apiFetchTest";
-import {
-  Button,
-  Cascader,
-  Checkbox,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-  Upload,
-  Modal,
-} from "antd";
+import { Button, Form, Input } from "antd";
 
 import { InspectionModal } from "./InspectionModal";
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 export const InspectionForm = () => {
-  //   const { data } = useRecoilValue(fetchUserQuestions);
-  //   const userQuestions = data;
-
   return (
     <>
       <div className="two-column-container vertical-center split-small">

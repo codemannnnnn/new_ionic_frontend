@@ -55,7 +55,7 @@ export const useGrabUserInformation = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [setEquipment, setQuestions, setFormInfo, setUserInfo]);
+  }, [setEquipment, setQuestions, setFormInfo, setUserInfo, userIDfromCookie]);
 };
 
 // export const usePullTheDataIn = () => {
@@ -250,7 +250,7 @@ export const useFetchDashboardInfo = () => {
     if (userIDfromCookie) {
       fetchDashboardInfo();
     }
-  }, [userIDfromCookie]);
+  }, [userIDfromCookie, setDashboardInfo]);
 
   return { dashboardInfo, error };
 };
