@@ -10,47 +10,41 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonCardContent,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import { call, person, settings } from "ionicons/icons";
 
 import { useStore, useGrabUserInformation } from "../../state/store";
 
-// console.log(useStore);
-export const Dashboard = () => {
-  const userData = useStore((state) => state.userInfo);
+import { FormData } from "./FormData";
+import { FormCards } from "./FormCards";
+import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
-  // firstName = firstName.toUpperCase() + firstName.slice(1);
+export const Dashboard = (render) => {
+  const history = useHistory();
+  const userData = useStore((state) => state.userInfo);
+  // console.log(userData);
+  useEffect(() => {
+    if (userData !== undefined) {
+      return;
+    } else {
+      history.push("/login");
+    }
+  }, [userData]);
 
   return (
     <>
       <IonPage>
         <IonContent fullscreen>
-          <div className="two-card">
-            <IonCard className="card-padding-mid">
-              <IonCardTitle>
-                Hello,{" "}
-                <span>
-                  {userData.firstName != undefined
-                    ? userData.firstName.charAt(0).toUpperCase() +
-                      userData.firstName.slice(1) +
-                      "."
-                    : null}
-                </span>
-              </IonCardTitle>
-            </IonCard>
-          </div>
-          <div className="two-card small-card left-align">
-            <IonCard className="card-padding-mid">
-              <IonCardTitle>
-                <div>Username {userData.username}</div>
-                <div>
-                  Member since{" "}
-                  {new Date(userData.created_at).toLocaleDateString()}
-                </div>
-                <div>Organization ID {userData.organization_id}</div>
-              </IonCardTitle>
-            </IonCard>
-          </div>
+          {userData && (
+            <>
+              {userData.role_id === 1 && <FormCards />}
+              <FormData />
+            </>
+          )}
         </IonContent>
       </IonPage>
     </>

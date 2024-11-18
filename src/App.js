@@ -1,7 +1,5 @@
 // import logo from "./logo.svg";
 import "./App.css";
-import { Redirect, Route } from "react-router-dom";
-
 import "@ionic/react/css/core.css";
 
 // import { useStore, useGrabUserInformation } from "./state/store";
@@ -34,6 +32,8 @@ import {
   trailSignOutline,
   logInOutline,
   logOutOutline,
+  clipboardOutline,
+  appsOutline,
 } from "ionicons/icons";
 import Tab1 from "./pages/Tab1";
 import Tab2 from "./pages/Tab2";
@@ -56,68 +56,87 @@ import { Signup } from "./components/core_components/Signup";
 import { Forms } from "./components/core_components/Forms";
 import { DarkModeToggle } from "./customHooks/DarkModeToggle";
 
-import { useGrabUserInformation } from "./state/store";
+import { useStore, useGrabUserInformation } from "./state/store";
+import { Profile } from "./components/core_components/Profile";
+import { Settings } from "./components/core_components/Settings";
+import { Notifications } from "./components/core_components/Notifications";
+import ErrorBoundary from "./components/error handling/ErrorBoundary";
+import ErrorPage from "./components/error handling/ErrorPage";
+import { useEffect } from "react";
+// import { useStore } from "zustand";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { PrivateRoute } from "./components/auth_components/PrivateRoute";
+
+const cookie = require("cookie");
 
 setupIonicReact();
 
 function App() {
   //pull your user information in.
-  useGrabUserInformation();
+  const userInfo = useStore((state) => state.userInfo);
+  // console.log({ userInfo });
+  const history = useHistory();
+  const userIDfromCookie = cookie.parse(document.cookie).userID;
+  // useGrabUserInformation();
+  // const getData = useGrabUserInformation();
+  // console.log({ userIDfromCookie });
+  // useEffect(() => {
+  //   if (userIDfromCookie) {
+  //     getData();
+  //   } else {
+  //     history.push("/login");
+  //   }
+  // }, [userIDfromCookie, getData, history]);
   return (
     <IonApp className="App">
-      <Header />
-      <IonContent>
-        <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Route exact path="/dashboard">
-                <Dashboard />
-              </Route>
-              <Route exact path="/forms">
-                <Forms />
-              </Route>
-              <Route exact path="/login">
-                <Login />
-              </Route>
-              <Route exact path="/signup">
-                <Signup />
-              </Route>
-              <Route exact path="/home">
-                <Home />
-              </Route>
-              <Route exact path="/">
-                <Redirect to="/home" />
-              </Route>
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="" href="/home">
-                <IonIcon aria-hidden="true" icon={bookmarkOutline} />
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="dashboard" href="/dashboard">
-                <IonIcon aria-hidden="true" icon={bookmarkOutline} />
-                <IonLabel>Dashboard</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="forms" href="/forms">
-                <IonIcon aria-hidden="true" icon={homeOutline} />
-                <IonLabel>Forms</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="login" href="/login">
-                <IonIcon aria-hidden="true" icon={logInOutline} />
-                <IonLabel>Login</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="signuIonText" href="/signup">
-                <IonIcon aria-hidden="true" icon={trailSignOutline} />
-                <IonLabel>Signup</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="logout" href="/logout">
-                <IonIcon aria-hidden="true" icon={logOutOutline} />
-                <IonLabel>Logout</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
-        </IonReactRouter>
-      </IonContent>
+      <IonReactRouter>
+        <ErrorBoundary>
+          <Header />
+          <IonContent>
+            <IonTabs>
+              <IonRouterOutlet>
+                <Switch>
+                  <Route path="/error" component={ErrorPage} />
+                  <Route exact path="/dashboard">
+                    <Dashboard />
+                  </Route>
+                  <Route exact path="/forms">
+                    <Forms />
+                  </Route>
+                  <Route exact path="/login">
+                    <Login />
+                  </Route>
+
+                  <Route exact path="/profile">
+                    <Profile />
+                  </Route>
+                  <Route exact path="/settings">
+                    <Settings />
+                  </Route>
+                  <Route exact path="/notifications">
+                    <Notifications />
+                  </Route>
+                  <Route path="*" component={ErrorPage} />
+                </Switch>
+              </IonRouterOutlet>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="dashboard" href="/dashboard">
+                  <IonIcon aria-hidden="true" icon={appsOutline} />
+                  <IonLabel>Dashboard</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="forms" href="/forms">
+                  <IonIcon aria-hidden="true" icon={clipboardOutline} />
+                  <IonLabel>Forms</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="login" href="/login">
+                  <IonIcon aria-hidden="true" icon={logInOutline} />
+                  <IonLabel>Login</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            </IonTabs>
+          </IonContent>
+        </ErrorBoundary>
+      </IonReactRouter>
     </IonApp>
   );
 }
