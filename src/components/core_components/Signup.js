@@ -72,6 +72,7 @@ export const Signup = () => {
         organization_id: values.organization_id,
       };
       registerUser(data);
+      // history.push("/dashboard");
     };
     return (
       <Button

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
+import { useHistory } from "react-router-dom";
 const cookie = require("cookie");
 
 export const useStore = create(
@@ -87,9 +88,9 @@ export const useGrabUserInformation = () => {
 // Custom hook for User Login
 export const useLoginUser = () => {
   // const loadData = useGrabUserInformation();
+
   const setUserInfo = useStore((e) => e.setUserInfo);
   const setUserID = useStore((e) => e.setUserID);
-  // const setUserInfo = useStore((e) => e.setUserInfo);
   const setFormInfo = useStore((e) => e.setFormInfo);
   const setQuestions = useStore((e) => e.setQuestions);
   const setEquipment = useStore((e) => e.setEquipment);
@@ -103,33 +104,9 @@ export const useLoginUser = () => {
         `${process.env.REACT_APP_BASE_URL}/auth/login`,
         payload
       );
-      // .then(
-      //   axios
-      //     .get(
-      //       `${process.env.REACT_APP_BASE_URL}/user_data/${useStore.userID}`
-      //       // `${process.env.REACT_APP_BASE_URL}/user_data/1`
-      //     )
-      //     .then((res) => {
-      //       // console.log(res.data.equipment, "cody");
-      //       setEquipment(res.data.equipment);
-      //       setUserInfo(res.data.user);
-      //       setFormInfo(res.data.form);
-      //       setQuestions(res.data.form[0].formQuestions);
-      //       // console.log(res.data);
-      //     })
-
-      //     .catch((err) => {
-      //       console.log(err);
-      //     })
-      // );
       const serializedCookie = cookie.serialize(
         "userID",
         response.data.user.user_id
-        // ,
-        // {
-        //   maxAge: 1, // Set the cookie to expire immediately
-        //   path: "/",
-        // }
       );
       // Set the cookie in the document
       document.cookie = serializedCookie;
@@ -139,17 +116,12 @@ export const useLoginUser = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/user_data/${response.data.user.user_id}`
         )
-        // `${process.env.REACT_APP_BASE_URL}/user_data/1`
-
         .then((res) => {
-          // console.log(res.data.equipment, "cody");
           setEquipment(res.data.equipment);
           setUserInfo(res.data.user);
           setFormInfo(res.data.form);
           setQuestions(res.data.form[0].formQuestions);
-          // console.log(res.data);
         })
-
         .catch((err) => {
           console.log(err);
         });
@@ -166,6 +138,12 @@ export const useLoginUser = () => {
 
 // Custom hook for User Registration
 export const useRegisterUser = () => {
+  const history = useHistory();
+  const setUserInfo = useStore((e) => e.setUserInfo);
+  const setUserID = useStore((e) => e.setUserID);
+  const setFormInfo = useStore((e) => e.setFormInfo);
+  const setQuestions = useStore((e) => e.setQuestions);
+  const setEquipment = useStore((e) => e.setEquipment);
   // const setUserInfo = useStore((e) => e.setUserInfo);
   const loginUser = async (
     username,
@@ -175,7 +153,6 @@ export const useRegisterUser = () => {
     organization_id
   ) => {
     try {
-      // console.log(username, password, firstName, lastName, organization_id);
       const payload = {
         username,
         password,
@@ -188,6 +165,42 @@ export const useRegisterUser = () => {
         `${process.env.REACT_APP_BASE_URL}/auth/register`,
         payload
       );
+      try {
+        const payload = {
+          username,
+          password,
+        }.username;
+        const response = await axios.post(
+          `${process.env.REACT_APP_BASE_URL}/auth/login`,
+          payload
+        );
+        const serializedCookie = cookie.serialize(
+          "userID",
+          response.data.user.user_id
+        );
+        // Set the cookie in the document
+        document.cookie = serializedCookie;
+        setUserInfo(response.data.user);
+        setUserID(response.data.user.user_id);
+        axios
+          .get(
+            `${process.env.REACT_APP_BASE_URL}/user_data/${response.data.user.user_id}`
+          )
+          .then((res) => {
+            setEquipment(res.data.equipment);
+            setUserInfo(res.data.user);
+            setFormInfo(res.data.form);
+            setQuestions(res.data.form[0].formQuestions);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        history.push("/dashboard");
+
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
 
       // setUserInfo(response.data.user);
       console.log(response.data);
