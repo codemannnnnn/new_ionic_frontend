@@ -111,7 +111,7 @@ export const Forms = () => {
       form_title: formTitle,
       form_type: formType,
       user_id: cookieUserID,
-      organization_id: userData.organization_id,
+      organization_id: orgID,
       form_template_id: formTemplateID,
       created_at: moment().toISOString(),
       questions: questionArr,

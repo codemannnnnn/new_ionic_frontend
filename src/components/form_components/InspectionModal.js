@@ -2,6 +2,7 @@ import { Button, Form, Input, Modal, Select } from "antd";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import { useStore } from "../../state/store";
 
 // import { postDataWithAuth } from "../../dataStore/apiFetchTest";
 import { postDataWithNoAuth } from "../../customHooks/useUserUtils";
@@ -11,6 +12,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
   const [form] = Form.useForm();
   const [questionArr, setQuestionArr] = useState(new Array(0).fill(1));
   const [initInputs, setInitInputs] = useState(1);
+  const userInfo = useStore((state) => state.userInfo);
 
   const addOneToQuestionArray = () => {
     setQuestionArr(new Array(initInputs).fill(1));
@@ -150,7 +152,7 @@ export const InspectionModal = () => {
       form_type: data.type,
       user_id: cookieUserID,
       questions: preppedData,
-      organization_id: 1,
+      organization_id: userInfo.organization_id,
       form_template_id: uuidv4(),
       created_at: moment().toISOString(),
     });
