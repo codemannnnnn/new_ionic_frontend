@@ -12,7 +12,6 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
   const [form] = Form.useForm();
   const [questionArr, setQuestionArr] = useState(new Array(0).fill(1));
   const [initInputs, setInitInputs] = useState(1);
-  const userInfo = useStore((state) => state.userInfo);
 
   const addOneToQuestionArray = () => {
     setQuestionArr(new Array(initInputs).fill(1));
@@ -120,6 +119,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
 export const InspectionModal = () => {
   const [open, setOpen] = useState(false);
   // console.log("form");
+  const userData = useStore((state) => state.userInfo);
 
   const postToBackEnd = (data) => {
     // const USERID = localStorage.getItem("id");
@@ -152,7 +152,7 @@ export const InspectionModal = () => {
       form_type: data.type,
       user_id: cookieUserID,
       questions: preppedData,
-      organization_id: userInfo.organization_id,
+      organization_id: userData.organization_id,
       form_template_id: uuidv4(),
       created_at: moment().toISOString(),
     });

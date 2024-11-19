@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
+// import { settingsOutline } from "ionicons/icons";
 import { IonPage } from "@ionic/react";
 import { Button, Form, Input, Space, Card, Select } from "antd";
-
+// import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 
 import { postNewEquipmentData } from "../../customHooks/useUserUtils";
