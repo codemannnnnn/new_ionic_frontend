@@ -38,7 +38,7 @@ import { Login } from "./components/core_components/Login";
 import { Forms } from "./components/core_components/Forms";
 // import { DarkModeToggle } from "./customHooks/DarkModeToggle";
 
-import { useStore, useGrabUserInformation } from "./state/store";
+// import { useStore, useGrabUserInformation } from "./state/store";
 import { Profile } from "./components/core_components/Profile";
 import { Settings } from "./components/core_components/Settings";
 import { Notifications } from "./components/core_components/Notifications";
@@ -46,7 +46,7 @@ import ErrorBoundary from "./components/error handling/ErrorBoundary";
 import ErrorPage from "./components/error handling/ErrorPage";
 // import { useEffect } from "react";
 // import { useStore } from "zustand";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 // import { PrivateRoute } from "./components/auth_components/PrivateRoute";
 
 // const cookie = require("cookie");

@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Statistic, Row, Col, Button } from "antd";
+import { Statistic, Row, Col } from "antd";
 import { useFetchDashboardInfo } from "../../state/store";
 import CountUp from "react-countup";
 
 export const FormCards = () => {
   const { dashboardInfo, loading, error } = useFetchDashboardInfo();
-  const { allEquipment, allFormAnswers, allForms, allUsers } = dashboardInfo;
+  const {
+    allEquipment,
+    // allFormAnswers,
+    allForms,
+    allUsers,
+  } = dashboardInfo;
   const [uniqueFormTemplates, setUniqueFormTemplates] = useState(0);
 
   useEffect(() => {
@@ -20,7 +25,7 @@ export const FormCards = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
 
-  const formatter = (value) => <CountUp end={value} separator="," />;
+  //   const formatter = (value) => <CountUp end={value} separator="," />;
 
   return (
     <>

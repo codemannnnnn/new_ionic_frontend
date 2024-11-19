@@ -96,7 +96,7 @@ export const FormData = () => {
                   </div>
                 );
               }
-              return;
+              return null;
             });
 
             created_at = moment(created_at).format("YYYY-MM-DD HH:mm:ss");
@@ -157,6 +157,7 @@ export const FormData = () => {
                 </div>
               );
             }
+            return null;
           });
 
           created_at = moment(created_at).format("YYYY-MM-DD HH:mm:ss");
@@ -169,7 +170,7 @@ export const FormData = () => {
             created_at: created_at,
             description: questionArr,
           });
-          return;
+          return null;
         });
       }
 

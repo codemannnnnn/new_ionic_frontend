@@ -36,7 +36,7 @@ export const Forms = () => {
     } else {
       history.push("/login");
     }
-  }, [userData]);
+  }, [userData, history]);
   const grabData = useGrabUserInformation();
 
   const formData = useStore((state) => state.formInfo);

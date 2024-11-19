@@ -18,7 +18,7 @@ export const Dashboard = (render) => {
     } else {
       history.push("/login");
     }
-  }, [userData]);
+  }, [userData, history]);
 
   return (
     <>
