@@ -116,7 +116,7 @@ export const FormData = () => {
                             console.log(equipment);
                             return (
                               <div key={eidx}>
-                                <strong>Hours:</strong>
+                                <strong>Hours: </strong>
                                 {equipment.hours}
                               </div>
                             );
