@@ -13,9 +13,10 @@ export const FormData = () => {
 
   const formData = useStore((state) => state.formInfo);
   const userData = useStore((state) => state.userInfo);
+  const equipmentData = useStore((state) => state.equipment);
   const [loading, setLoading] = useState(true); // Add loading state
 
-  // console.log("firing....");
+  // console.log({ equipmentData });
   // useGrabUserInformation();
   const [sortedInfo, setSortedInfo] = useState({
     order: "descend",
@@ -50,7 +51,7 @@ export const FormData = () => {
     <IonIcon icon={closeCircleOutline} style={{ color: "red" }} />
   );
 
-  // console.log(formData);
+  console.log(equipmentData);
   // console.log({ gridData });
   useEffect(() => {
     if (formData) {
@@ -60,7 +61,8 @@ export const FormData = () => {
       if (userData.role_id === 2) {
         formData.reduce((acc, e) => {
           if (e.userInfo.user_id === userData.user_id) {
-            var { form_title, form_type, name, created_at } = e.data;
+            var { form_title, form_type, name, created_at, form_note } = e.data;
+            // console.log(form_note);
             var { firstName, lastName } = e.userInfo;
             created_at = created_at || "2024-08-09 16:36:00";
             firstName = firstName.toUpperCase();
@@ -78,21 +80,53 @@ export const FormData = () => {
                 question.answer !== ""
               ) {
                 return (
-                  <div key={idx} className="form-grid-data">
-                    <span className="font-small" style={{ width: "10px" }}>
-                      {idx + 1}
-                    </span>
+                  <div key={idx}>
+                    <div className="form-grid-data">
+                      <span className="font-small" style={{ width: "10px" }}>
+                        {idx + 1}
+                      </span>
 
-                    <span className="font-mid " id="right-align">
-                      {question.answer === true ? (
-                        <YesIcon />
-                      ) : question.answer === false ? (
-                        <NoIcon />
-                      ) : (
-                        question.answer
-                      )}
-                    </span>
-                    <span className="font-mid">{question.question}</span>
+                      <span className="font-mid " id="right-align">
+                        {question.answer === true ? (
+                          <YesIcon />
+                        ) : question.answer === false ? (
+                          <NoIcon />
+                        ) : (
+                          question.answer
+                        )}
+                      </span>
+
+                      <span className="font-mid">{question.question}</span>
+                    </div>
+                    {idx === 1 && form_note && (
+                      <div
+                        // id="form-note"
+                        key={`${idx}-note`}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          alignItems: "left",
+                          marginLeft: "2%",
+                          marginTop: "2%",
+                        }}
+                      >
+                        {equipmentData.map((equipment, eidx) => {
+                          if (equipment.equipment_id === e.data.equipment_id) {
+                            console.log(equipment);
+                            return (
+                              <div key={eidx}>
+                                <strong>Hours:</strong>
+                                {equipment.hours}
+                              </div>
+                            );
+                          }
+                        })}
+                        <div>
+                          <strong>Note:</strong> {form_note}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               }

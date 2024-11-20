@@ -1,8 +1,3 @@
-// import { EquipmentGrid } from "../form_components/EquipmentGrid";
-// import { InspectionForm } from "../form_components/InspectionForm";
-// import { InspectionModal } from "../form_components/InspectionModal";
-// import { FormsGrid } from "../form_components/FormsGrid";
-
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 //import ionic stuff
@@ -19,7 +14,7 @@ import {
 
 import axios from "axios";
 
-import { Button, Modal, Select } from "antd";
+import { Button, Modal, Select, Input } from "antd";
 
 import { useStore, useGrabUserInformation } from "../../state/store";
 import { postFormData } from "../../customHooks/useUserUtils";
@@ -41,13 +36,20 @@ export const Forms = () => {
 
   const formData = useStore((state) => state.formInfo);
   const equipment = useStore((state) => state.equipment);
+  const [toggleNoData, setToggleNoData] = useState(false);
   // console.log(equipment);
+  // console.log(formData);
+  // if (formData === undefined || formData === null || formData.length === 0) {
+  //   console.log("no form data");
+  // }
 
   const [stateEquipment, setStateEquipment] = useState([]);
   const [selectedEquipment, setSelectedEquipment] = useState("");
   const [selectedEquipmentID, setSelectedEquipmentID] = useState("");
   const [selectValidation, setSelectValidation] = useState("error");
   const [loading, setLoading] = useState(true); // Add loading state
+  const [hours, setHours] = useState("");
+  const [notes, setNotes] = useState("");
 
   const [selectedForm, setSelectedForm] = useState(0);
   const [questionAnswers, setQuestionAnswers] = useState([]);
@@ -86,7 +88,7 @@ export const Forms = () => {
         userID = e.data.user_id;
         orgID = e.data.organization_id;
         formTemplateID = e.data.form_template_id;
-        console.log(e);
+        // console.log(e);
         const { formQuestions } = e;
         // console.log({ formQuestions });
         // console.log({ questionAnswers });
@@ -116,6 +118,8 @@ export const Forms = () => {
       created_at: moment().toISOString(),
       questions: questionArr,
       equipment_id: selectedEquipmentID,
+      hours: hours,
+      form_note: notes,
       // formData[selectedForm].formQuestions.question,
     };
     // console.log(postData);
@@ -248,8 +252,8 @@ export const Forms = () => {
     <>
       <IonPage>
         <IonContent fullscreen>
-          {/* {console.log("lkjlkjlkjl")} */}
-          {formData ? (
+          {/* /* {console.log({ formData })} */}
+          {formData && formData.length > 0 ? (
             formData
               .reduce((uniqueForms, form) => {
                 const existingForm = uniqueForms.find(
@@ -304,6 +308,16 @@ export const Forms = () => {
                           onChange={handleInputChanges}
                           options={stateEquipment}
                         />
+                        {/* <div className="split-two"> */}
+                        {/* <span>Hours</span> */}
+                        <div style={{ marginTop: "3%", marginBottom: "3%" }}>
+                          <Input
+                            onChange={(e) => setHours(e.target.value)}
+                            placeholder="Hours"
+                            style={{ width: "20%" }}
+                          />
+                        </div>
+                        {/* </div> */}
                         {/* Set up the form to display the quesdions and booleans for the form. Add button to save work. */}
                         {/* {formData[selectedForm].formQuestions.map((j, index) => { */}
                         {formData.map((j, index) => {
@@ -377,13 +391,22 @@ export const Forms = () => {
                             });
                           }
                         })}
+                        <div style={{ marginTop: "3%", marginBottom: "3%" }}>
+                          {/* <div>Notes</div> */}
+                          <Input
+                            placeholder="Notes"
+                            onChange={(e) => setNotes(e.target.value)}
+                            style={{ width: "100%" }}
+                          />
+                        </div>
                       </Modal>
                     </span>
                   </IonCard>
                 );
               })
           ) : (
-            <p>Loading...</p> // Show loading message while data is being fetched
+            <p>No forms created yet, please contact your admin.</p> // Show loading message while data is being fetched
+            // toggleNoData && <p>No data available</p>}
           )}
         </IonContent>
       </IonPage>

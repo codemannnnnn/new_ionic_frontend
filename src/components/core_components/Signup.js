@@ -70,6 +70,7 @@ export const Signup = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         organization_id: values.organization_id,
+        role_id: values.organization_id, //hardcoded for now (operators.)
       };
       registerUser(data);
       // history.push("/dashboard");

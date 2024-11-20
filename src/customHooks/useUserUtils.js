@@ -11,7 +11,7 @@ export const postDataWithNoAuth = (endpoint, body) => {
   return axios.post(`${baseUrl}/${endpoint}`, body);
 };
 export const postFormData = (body) => {
-  console.log(body);
+  // console.log(body);
   axios
     .post(`${process.env.REACT_APP_BASE_URL}/form`, body)
     .then((res) => {})
@@ -25,7 +25,7 @@ export const postNewEquipmentData = (body) => {
   axios
     .post(`${process.env.REACT_APP_BASE_URL}/equipment`, body)
     .then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
     })
     .catch((err) => {
       console.log(err);

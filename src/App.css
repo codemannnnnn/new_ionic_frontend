@@ -174,3 +174,11 @@ ion-radio.radio-checked::part(mark) {
 
   transform: rotate(45deg);
 }
+
+#form-note {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-top: 2%;
+  margin-left: 2%;
+}

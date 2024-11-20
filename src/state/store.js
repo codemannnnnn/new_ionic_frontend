@@ -150,29 +150,31 @@ export const useRegisterUser = () => {
     password,
     firstName,
     lastName,
-    organization_id
+    organization_id,
+    role_id
   ) => {
     try {
-      const payload = {
+      const registerPayload = {
         username,
         password,
         firstName,
         lastName,
         organization_id,
+        role_id, //hardcoded for now (operators.)
       }.username;
-      console.log(payload);
+      console.log({ registerPayload });
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/auth/register`,
-        payload
+        registerPayload
       );
       try {
-        const payload = {
+        const loginPayload = {
           username,
           password,
         }.username;
         const response = await axios.post(
           `${process.env.REACT_APP_BASE_URL}/auth/login`,
-          payload
+          loginPayload
         );
         const serializedCookie = cookie.serialize(
           "userID",

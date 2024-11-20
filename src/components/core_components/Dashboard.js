@@ -11,6 +11,7 @@ import { useEffect } from "react";
 export const Dashboard = (render) => {
   const history = useHistory();
   const userData = useStore((state) => state.userInfo);
+  // const equipment
   // console.log(userData);
   useEffect(() => {
     if (userData !== undefined) {

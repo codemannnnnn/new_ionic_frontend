@@ -69,7 +69,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
           </Select>
         </Form.Item>
         {/* WIRE THIS UP IN THE BACKEND */}
-        <Form.Item
+        {/* <Form.Item
           name="hours"
           label="Hours"
           rules={[
@@ -80,9 +80,9 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
           ]}
         >
           <Input name="form_hours" />
-        </Form.Item>
+        </Form.Item> */}
         {/* WIRE THIS UP IN THE BACKEND */}
-        <Form.Item
+        {/* <Form.Item
           name="notes"
           label="Notes"
           rules={[
@@ -93,7 +93,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
           ]}
         >
           <Input name="form_notes" />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item name="question-1" label="Question">
           <Input type="textarea" />
         </Form.Item>
@@ -157,7 +157,6 @@ export const InspectionModal = () => {
       created_at: moment().toISOString(),
     });
     postDataWithNoAuth(endpoint, ...formQuestionDataBlob);
-    // postDataWithAuth(endpoint, ...formQuestionDataBlob);
   };
 
   const onCreate = (values) => {

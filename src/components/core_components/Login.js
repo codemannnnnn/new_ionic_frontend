@@ -111,6 +111,7 @@ export const Login = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         organization_id: values.organization_id,
+        role_id: 2, //hardcoded for now (operators.)
       };
       registerUser(data);
     };
