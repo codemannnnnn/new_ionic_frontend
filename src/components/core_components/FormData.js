@@ -82,11 +82,11 @@ export const FormData = () => {
                 return (
                   <div key={idx}>
                     <div className="form-grid-data">
-                      <span className="font-small" style={{ width: "10px" }}>
+                      <div className="font-small" style={{ width: "10px" }}>
                         {idx + 1}
-                      </span>
+                      </div>
 
-                      <span className="font-mid " id="right-align">
+                      <div className="font-mid " id="right-align">
                         {question.answer === true ? (
                           <YesIcon />
                         ) : question.answer === false ? (
@@ -94,11 +94,11 @@ export const FormData = () => {
                         ) : (
                           question.answer
                         )}
-                      </span>
+                      </div>
 
-                      <span className="font-mid">{question.question}</span>
+                      <div className="font-mid">{question.question}</div>
                     </div>
-                    {idx === 1 && form_note && (
+                    {idx === formQuestions.length - 1 && form_note && (
                       <div
                         // id="form-note"
                         key={`${idx}-note`}
