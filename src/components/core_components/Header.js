@@ -49,23 +49,36 @@ export const Header = () => {
       <div className="app-header">
         <img src={white} alt="logo" width={"140px"} />
         <div className="header-icon-group">
-          <div className="header-icon">
+          <div className="header-icon-ind">
             <IonButton onClick={(e) => history.push("profile")} fill="clear">
-              <IonIcon aria-hidden="true" icon={personCircleOutline} />
+              <IonIcon
+                aria-hidden="true"
+                icon={personCircleOutline}
+                // size="large"
+                className="header-icon"
+              />
             </IonButton>
           </div>
 
-          <div className="header-icon">
+          <div className="header-icon-ind">
             <IonButton onClick={(e) => history.push("settings")} fill="clear">
-              <IonIcon aria-hidden="true" icon={settingsOutline} />
+              <IonIcon
+                aria-hidden="true"
+                icon={settingsOutline}
+                className="header-icon"
+              />
             </IonButton>
           </div>
-          <div className="header-icon">
+          <div className="header-icon-ind">
             <IonButton
               onClick={(e) => history.push("notifications")}
               fill="clear"
             >
-              <IonIcon aria-hidden="true" icon={notificationsOutline} />
+              <IonIcon
+                aria-hidden="true"
+                icon={notificationsOutline}
+                className="header-icon"
+              />
             </IonButton>
           </div>
         </div>

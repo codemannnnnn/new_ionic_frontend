@@ -87,8 +87,8 @@
 .header-icon-group {
   display: flex;
 }
-.header-icons {
-  font-size: 30px;
+.header-icon {
+  font-size: 28px;
 }
 .form-grid-data {
   display: flex;
@@ -226,11 +226,15 @@ ion-radio.radio-checked::part(mark) {
     margin-left: 1%;
   }
   .header-icon-group {
-    /* padding: 0.5%; */
-    margin-left: 32%;
+    /* width: 20%; */
+    margin-left: 38%;
+  }
+  .header-icon-ind {
+    margin-left: -15%;
   }
   .header-icon {
-    margin-left: -10%;
+    /* margin-left: -10%; */
+    font-size: 24px;
   }
   .login-card {
     width: 100%;
