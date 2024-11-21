@@ -85,7 +85,7 @@ export const FormData = () => {
                 return (
                   <div key={idx}>
                     <div className="form-grid-data">
-                      <div className="font-small" style={{ width: "10px" }}>
+                      <div className="font-small" style={{ width: "45px" }}>
                         {idx + 1}
                       </div>
 
