@@ -51,7 +51,7 @@ export const FormData = () => {
     <IonIcon icon={closeCircleOutline} style={{ color: "red" }} />
   );
 
-  console.log(equipmentData);
+  // console.log(equipmentData);
   // console.log({ gridData });
   useEffect(() => {
     if (formData) {
@@ -100,7 +100,6 @@ export const FormData = () => {
                     </div>
                     {idx === formQuestions.length - 1 && form_note && (
                       <div
-                        // id="form-note"
                         key={`${idx}-note`}
                         style={{
                           display: "flex",
@@ -113,7 +112,7 @@ export const FormData = () => {
                       >
                         {equipmentData.map((equipment, eidx) => {
                           if (equipment.equipment_id === e.data.equipment_id) {
-                            console.log(equipment);
+                            // console.log(equipment);
                             return (
                               <div key={eidx}>
                                 <strong>Hours: </strong>

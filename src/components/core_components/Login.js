@@ -139,7 +139,7 @@ export const Login = () => {
           paddingTop: "20px",
         }}
       >
-        <Card style={{ width: "50%" }}>
+        <Card className="login-card">
           <div className="login">
             <Form
               form={loginForm}

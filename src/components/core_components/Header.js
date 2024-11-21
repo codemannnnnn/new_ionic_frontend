@@ -49,92 +49,25 @@ export const Header = () => {
       <div className="app-header">
         <img src={white} alt="logo" width={"140px"} />
         <div className="header-icon-group">
-          <span>
+          <div className="header-icon">
             <IonButton onClick={(e) => history.push("profile")} fill="clear">
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={personCircleOutline}
-              />
+              <IonIcon aria-hidden="true" icon={personCircleOutline} />
             </IonButton>
-          </span>
+          </div>
 
-          <span>
+          <div className="header-icon">
             <IonButton onClick={(e) => history.push("settings")} fill="clear">
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={settingsOutline}
-              />
+              <IonIcon aria-hidden="true" icon={settingsOutline} />
             </IonButton>
-          </span>
-          <span>
+          </div>
+          <div className="header-icon">
             <IonButton
               onClick={(e) => history.push("notifications")}
               fill="clear"
             >
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={notificationsOutline}
-              />
+              <IonIcon aria-hidden="true" icon={notificationsOutline} />
             </IonButton>
-          </span>
-
-          {/* 
-          version 2 of this app.
-          <span>
-            <IonButton onClick={toggleDrawer} fill="clear">
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={personCircleOutline}
-              />
-            </IonButton>
-          </span>
-
-          <span>
-            <IonButton onClick={toggleDrawer} fill="clear">
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={settingsOutline}
-              />
-            </IonButton>
-          </span>
-          <span>
-            <IonButton onClick={toggleDrawer} fill="clear">
-              <IonIcon
-                className="header-icons"
-                aria-hidden="true"
-                icon={notificationsOutline}
-              />
-            </IonButton>
-          </span>
-
-          <Drawer
-            title="Menu"
-            placement="right"
-            closable={false}
-            onClose={toggleDrawer}
-            open={showDrawer}
-          >
-            <p>
-              <Button type="link" name="profile" onClick={handleClick}>
-                Profile
-              </Button>
-            </p>
-            <p>
-              <Button type="link" name="settings" onClick={handleClick}>
-                Settings
-              </Button>
-            </p>
-            <p>
-              <Button type="link" name="notifications" onClick={handleClick}>
-                Notifications
-              </Button>
-            </p>
-          </Drawer> */}
+          </div>
         </div>
       </div>
     </IonHeader>
