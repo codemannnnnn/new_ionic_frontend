@@ -52,7 +52,7 @@ export const FormData = () => {
   );
 
   // console.log(equipmentData);
-  // console.log({ gridData });
+  // console.log({ formData });
   useEffect(() => {
     if (formData) {
       var tempArr = [];
@@ -60,9 +60,12 @@ export const FormData = () => {
       //2 is the role_id for operator. show only that operators forms submitted.
       if (userData.role_id === 2) {
         formData.reduce((acc, e) => {
-          if (e.userInfo.user_id === userData.user_id) {
+          if (
+            e.userInfo.user_id === userData.user_id &&
+            e.data.name !== "No name" //removes the initial form created from the array.
+          ) {
             var { form_title, form_type, name, created_at, form_note } = e.data;
-            // console.log(form_note);
+            console.log(e);
             var { firstName, lastName } = e.userInfo;
             created_at = created_at || "2024-08-09 16:36:00";
             firstName = firstName.toUpperCase();
