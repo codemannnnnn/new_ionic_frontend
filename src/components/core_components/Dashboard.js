@@ -1,7 +1,7 @@
 import { IonContent, IonPage } from "@ionic/react";
 // import { call, person, settings } from "ionicons/icons";
 
-import { useStore } from "../../state/store";
+import { useStore, useGrabUserInformation } from "../../state/store";
 
 import { FormData } from "./FormData";
 import { FormCards } from "./FormCards";
@@ -13,6 +13,8 @@ export const Dashboard = (render) => {
   const userData = useStore((state) => state.userInfo);
   // const equipmentss
   // console.log(userData);
+  const grabData = useGrabUserInformation();
+
   useEffect(() => {
     if (userData !== undefined) {
       return;
