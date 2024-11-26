@@ -226,24 +226,6 @@ export const Forms = () => {
     validateSelectInput();
   };
 
-  useEffect(() => {
-    // Function to check if the click is outside the modal
-    const handleClickOutside = (event) => {
-      const modal = document.getElementById("forms_modal_1");
-      if (modal && !modal.contains(event.target)) {
-        setSelectedValue("Please choose an option"); // Reset the select input
-      }
-    };
-
-    // Add event listener when the component mounts or the modal is opened
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Remove event listener on cleanup
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []); // You might need to adjust the dependency array based on when you want this effect to run
-
   const validateSelectInput = () => {
     try {
       const inputBox = document.getElementById("form_select_validation");
@@ -462,7 +444,23 @@ export const Forms = () => {
       }
     }
   }, [selectedForm, formData]);
+  // useEffect(() => {
+  //   // Function to check if the click is outside the modal
+  //   const handleClickOutside = (event) => {
+  //     const modal = document.getElementById("forms_modal_1");
+  //     if (modal && !modal.contains(event.target)) {
+  //       setSelectedValue("Please choose an option"); // Reset the select input
+  //     }
+  //   };
 
+  //   // Add event listener when the component mounts or the modal is opened
+  //   document.addEventListener("mousedown", handleClickOutside);
+
+  //   // Remove event listener on cleanup
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []); // You might need to adjust the dependency array based on when you want this effect to run
   return (
     <>
       <IonPage>
