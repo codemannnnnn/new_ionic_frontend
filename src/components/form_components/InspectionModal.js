@@ -134,7 +134,7 @@ export const InspectionModal = () => {
     console.log(dataToArr);
 
     dataToArr.slice(2).forEach((e, idx) => {
-      console.log(e);
+      // console.log(e);
       // const question = `question-${idx}`;
       if (e[1]) {
         const obj = {
