@@ -65,7 +65,7 @@ export const FormData = () => {
             e.data.name !== "No name" //removes the initial form created from the array.
           ) {
             var { form_title, form_type, name, created_at, form_note } = e.data;
-            console.log(e);
+            // console.log(e);
             var { firstName, lastName } = e.userInfo;
             created_at = created_at || "2024-08-09 16:36:00";
             firstName = firstName.toUpperCase();

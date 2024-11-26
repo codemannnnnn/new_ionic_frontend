@@ -136,14 +136,15 @@ export const InspectionModal = () => {
     dataToArr.slice(2).forEach((e, idx) => {
       console.log(e);
       // const question = `question-${idx}`;
-      const obj = {
-        question: e[1],
-        question_id: uuidv4(),
-        user_id: cookieUserID,
-        form_id: formId,
-      };
-
-      preppedData.push(obj);
+      if (e[1]) {
+        const obj = {
+          question: e[1],
+          question_id: uuidv4(),
+          user_id: cookieUserID,
+          form_id: formId,
+        };
+        preppedData.push(obj);
+      }
     });
     const formQuestionDataBlob = [];
     formQuestionDataBlob.push({

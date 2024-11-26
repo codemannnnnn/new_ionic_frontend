@@ -14,12 +14,24 @@ import {
 
 import axios from "axios";
 
-import { Button, Modal, Select, Input } from "antd";
+import {
+  Button,
+  Modal,
+  Select,
+  Input,
+  Form,
+  InputNumber,
+  Typography,
+  Popconfirm,
+  Table,
+} from "antd";
 
 import { useStore, useGrabUserInformation } from "../../state/store";
 import { postFormData } from "../../customHooks/useUserUtils";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+
+import { updateDataWithNoAuth } from "../../customHooks/useUserUtils";
 const cookie = require("cookie");
 export const Forms = () => {
   const history = useHistory();
@@ -214,23 +226,23 @@ export const Forms = () => {
     validateSelectInput();
   };
 
-  // useEffect(() => {
-  //   // Function to check if the click is outside the modal
-  //   const handleClickOutside = (event) => {
-  //     const modal = document.getElementById("forms_modal_1");
-  //     if (modal && !modal.contains(event.target)) {
-  //       setSelectedValue("Please choose an option"); // Reset the select input
-  //     }
-  //   };
+  useEffect(() => {
+    // Function to check if the click is outside the modal
+    const handleClickOutside = (event) => {
+      const modal = document.getElementById("forms_modal_1");
+      if (modal && !modal.contains(event.target)) {
+        setSelectedValue("Please choose an option"); // Reset the select input
+      }
+    };
 
-  //   // Add event listener when the component mounts or the modal is opened
-  //   document.addEventListener("mousedown", handleClickOutside);
+    // Add event listener when the component mounts or the modal is opened
+    document.addEventListener("mousedown", handleClickOutside);
 
-  //   // Remove event listener on cleanup
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []); // You might need to adjust the dependency array based on when you want this effect to run
+    // Remove event listener on cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []); // You might need to adjust the dependency array based on when you want this effect to run
 
   const validateSelectInput = () => {
     try {
@@ -247,6 +259,209 @@ export const Forms = () => {
     }
   };
   // console.log(selectedEquipmentID);
+
+  //edit modal functions
+  const [editOpen, setEditOpen] = useState(false);
+  const [editConfirmLoading, setEditConfirmLoading] = useState(false);
+  const [editNotes, setEditNotes] = useState("");
+
+  const showEditModal = (formId) => {
+    setSelectedForm(formId);
+    setEditOpen(true);
+  };
+
+  const handleEditOk = () => {
+    setEditConfirmLoading(true);
+    var postArr = [];
+    dataQuestions.forEach((e) => {
+      postArr.push({
+        question_id: e.question_id,
+        question: e.question,
+      });
+    });
+    // console.log(postArr);
+    postDataToBackend(postArr);
+    // Perform your edit logic here, e.g., update the form data with the new notes
+    setTimeout(() => {
+      setEditOpen(false);
+      setEditConfirmLoading(false);
+    }, 2000);
+  };
+
+  const postDataToBackend = (body) => {
+    updateDataWithNoAuth(`question`, body);
+  };
+
+  const handleEditCancel = () => {
+    setEditOpen(false);
+  };
+  const originData = Array.from({
+    length: 100,
+  }).map((_, i) => ({
+    key: i.toString(),
+    name: `Edward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  }));
+  const EditableCell = ({
+    editing,
+    dataIndex,
+    title,
+    inputType,
+    record,
+    index,
+    children,
+    ...restProps
+  }) => {
+    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+            rules={[
+              {
+                required: true,
+                message: `Please Input ${title}!`,
+              },
+            ]}
+          >
+            {inputNode}
+          </Form.Item>
+        ) : (
+          children
+        )}
+      </td>
+    );
+  };
+  const [form] = Form.useForm();
+  const [data, setData] = useState(originData);
+  const [dataQuestions, setDataQuestions] = useState([]);
+  const [editingKey, setEditingKey] = useState("");
+  const isEditing = (record) => record.key === editingKey;
+  const edit = (record) => {
+    form.setFieldsValue({
+      name: "",
+      age: "",
+      address: "",
+      ...record,
+    });
+    setEditingKey(record.key);
+  };
+  const cancel = () => {
+    setEditingKey("");
+  };
+
+  const save = async (key) => {
+    try {
+      // console.log("saved");
+      const row = await form.validateFields();
+      const newData = [...dataQuestions];
+      const index = newData.findIndex((item) => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        // setPostData(newData);
+        setDataQuestions(newData);
+        setEditingKey("");
+        // postDataToBackend(newData);
+      } else {
+        newData.push(row);
+        setDataQuestions(newData);
+        setEditingKey("");
+      }
+    } catch (errInfo) {
+      console.log("Validate Failed:", errInfo);
+    }
+  };
+  // const [postData, setPostData] = useState([]);
+  // console.log(dataQuestions);
+
+  const columns = [
+    {
+      title: "Question",
+      dataIndex: "question",
+      width: "75%",
+      editable: true,
+    },
+    // {
+    //   title: "age",
+    //   dataIndex: "age",
+    //   width: "15%",
+    //   editable: true,
+    // },
+    // {
+    //   title: "address",
+    //   dataIndex: "address",
+    //   width: "40%",
+    //   editable: true,
+    // },
+    {
+      title: "",
+      dataIndex: "operation",
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <span>
+            <Typography.Link
+              onClick={() => save(record.key)}
+              style={{
+                marginInlineEnd: 8,
+              }}
+            >
+              Save
+            </Typography.Link>
+            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+              <a>Cancel</a>
+            </Popconfirm>
+          </span>
+        ) : (
+          <Typography.Link
+            disabled={editingKey !== ""}
+            onClick={() => edit(record)}
+          >
+            Edit
+          </Typography.Link>
+        );
+      },
+    },
+  ];
+  const mergedColumns = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        inputType: col.dataIndex === "age" ? "number" : "text",
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    };
+  });
+  useEffect(() => {
+    if (selectedForm) {
+      const selectedFormData = formData.find(
+        (form) => form.data.form_id === selectedForm
+      );
+      if (selectedFormData) {
+        setDataQuestions(
+          selectedFormData.formQuestions.map((question, index) => ({
+            ...question,
+            key: index,
+          }))
+        );
+      }
+    }
+  }, [selectedForm, formData]);
 
   return (
     <>
@@ -274,133 +489,181 @@ export const Forms = () => {
                   <IonCard className="card-padding-small left-align" key={idx}>
                     <IonCardTitle>{form_title}</IonCardTitle>
                     {/* <IonCardSubtitle>{form_type}</IonCardSubtitle> */}
-                    <Button
-                      data-value-form={e.data.form_id}
-                      // data-value-form={idx}
-                      type="primary"
-                      onClick={showModal}
-                    >
-                      Open
-                    </Button>
-                    <span id="forms_modal_1">
-                      {/* {console.log(formData)} */}
-                      {/* {console.log(e)} */}
-                      <Modal
-                        // title={formData[selectedForm].data.title}
-                        title={formData.map((k) => {
-                          if (k.data.form_id === selectedForm) {
-                            // console.log(k.data.form_title);
-                            return k.data.form_title;
-                            // return "lkjlj";
-                          }
-                        })}
-                        open={open}
-                        onOk={handleOk}
-                        confirmLoading={confirmLoading}
-                        onCancel={handleCancel}
-                      >
-                        <Select
-                          value={selectedValue} // Bind the select value to your state
-                          status={selectValidation}
-                          style={{
-                            width: 240,
-                          }}
-                          onChange={handleInputChanges}
-                          options={stateEquipment}
-                        />
-                        {/* <div className="split-two"> */}
-                        {/* <span>Hours</span> */}
-                        <div style={{ marginTop: "3%", marginBottom: "3%" }}>
-                          <Input
-                            onChange={(e) => setHours(e.target.value)}
-                            placeholder="Hours"
-                            style={{ width: "20%" }}
+                    <div className="split-two">
+                      <div>
+                        <Button
+                          data-value-form={e.data.form_id}
+                          // data-value-form={idx}
+                          type="primary"
+                          onClick={showModal}
+                        >
+                          Open
+                        </Button>
+                      </div>
+                      <span id="forms_modal_1">
+                        {/* {console.log(formData)} */}
+                        {/* {console.log(e)} */}
+                        <Modal
+                          // title={formData[selectedForm].data.title}
+                          title={formData.map((k) => {
+                            if (k.data.form_id === selectedForm) {
+                              // console.log(k.data.form_title);
+                              return k.data.form_title;
+                              // return "lkjlj";
+                            }
+                          })}
+                          open={open}
+                          onOk={handleOk}
+                          confirmLoading={confirmLoading}
+                          onCancel={handleCancel}
+                        >
+                          <Select
+                            value={selectedValue} // Bind the select value to your state
+                            status={selectValidation}
+                            style={{
+                              width: 240,
+                            }}
+                            onChange={handleInputChanges}
+                            options={stateEquipment}
                           />
-                        </div>
-                        {/* </div> */}
-                        {/* Set up the form to display the quesdions and booleans for the form. Add button to save work. */}
-                        {/* {formData[selectedForm].formQuestions.map((j, index) => { */}
-                        {formData.map((j, index) => {
-                          if (j.data.form_id === selectedForm) {
-                            // console.log(j);
+                          {/* <div className="split-two"> */}
+                          {/* <span>Hours</span> */}
+                          <div style={{ marginTop: "3%", marginBottom: "3%" }}>
+                            <Input
+                              onChange={(e) => setHours(e.target.value)}
+                              placeholder="Hours"
+                              style={{ width: "20%" }}
+                            />
+                          </div>
+                          {/* </div> */}
+                          {/* Set up the form to display the quesdions and booleans for the form. Add button to save work. */}
+                          {/* {formData[selectedForm].formQuestions.map((j, index) => { */}
+                          {formData.map((j, index) => {
+                            if (j.data.form_id === selectedForm) {
+                              // console.log(j);
 
-                            const { formQuestions } = j;
-                            return formQuestions.map((l, index) => {
-                              const { question } = l;
-                              // console.log({ question });
+                              const { formQuestions } = j;
+                              return formQuestions.map((l, index) => {
+                                const { question } = l;
+                                // console.log({ question });
 
-                              return (
-                                <div className="split-two" key={index}>
-                                  <div>
-                                    <IonLabel>{question}</IonLabel>
-                                  </div>
-                                  <div>
-                                    <IonRadioGroup
-                                      className="split-radio"
-                                      allowEmptySelection={true}
-                                      onIonChange={(answer) => {
-                                        var questionAnswerData = [
-                                          ...questionAnswers,
-                                        ]; // Copy the existing state
-                                        const answerIndex =
-                                          questionAnswerData.findIndex(
-                                            (q) =>
-                                              q.question_id === l.question_id
+                                return (
+                                  <div className="split-two" key={index}>
+                                    <div>
+                                      <IonLabel>{question}</IonLabel>
+                                    </div>
+                                    <div>
+                                      <IonRadioGroup
+                                        className="split-radio"
+                                        allowEmptySelection={true}
+                                        onIonChange={(answer) => {
+                                          var questionAnswerData = [
+                                            ...questionAnswers,
+                                          ]; // Copy the existing state
+                                          const answerIndex =
+                                            questionAnswerData.findIndex(
+                                              (q) =>
+                                                q.question_id === l.question_id
+                                            );
+
+                                          if (answerIndex >= 0) {
+                                            // Update the answer if the question already exists
+                                            questionAnswerData[
+                                              answerIndex
+                                            ].answer = answer.detail.value;
+                                          } else {
+                                            // Add a new answer if the question does not exist
+                                            questionAnswerData.push({
+                                              question_id: l.question_id,
+                                              answer: answer.detail.value,
+                                            });
+                                          }
+
+                                          setQuestionAnswers(
+                                            questionAnswerData
                                           );
-
-                                        if (answerIndex >= 0) {
-                                          // Update the answer if the question already exists
-                                          questionAnswerData[
-                                            answerIndex
-                                          ].answer = answer.detail.value;
-                                        } else {
-                                          // Add a new answer if the question does not exist
-                                          questionAnswerData.push({
-                                            question_id: l.question_id,
-                                            answer: answer.detail.value,
-                                          });
-                                        }
-
-                                        setQuestionAnswers(questionAnswerData);
-                                      }}
-                                    >
-                                      <IonItem lines="none">
-                                        <IonLabel>Yes</IonLabel>
-                                        <IonRadio
-                                          aria-label="Custom checkbox"
-                                          slot="end"
-                                          value="yes"
-                                        />
-                                      </IonItem>
-                                      <IonItem
-                                        lines="none"
-                                        // id={j.question_id}
-                                        // onClick={(e) => console.log(e, "no clicked")}
+                                        }}
                                       >
-                                        <IonLabel>No</IonLabel>
-                                        <IonRadio
-                                          aria-label="Custom checkbox"
-                                          slot="end"
-                                          value="no"
-                                        />
-                                      </IonItem>
-                                    </IonRadioGroup>
+                                        <IonItem lines="none">
+                                          <IonLabel>Yes</IonLabel>
+                                          <IonRadio
+                                            aria-label="Custom checkbox"
+                                            slot="end"
+                                            value="yes"
+                                          />
+                                        </IonItem>
+                                        <IonItem
+                                          lines="none"
+                                          // id={j.question_id}
+                                          // onClick={(e) => console.log(e, "no clicked")}
+                                        >
+                                          <IonLabel>No</IonLabel>
+                                          <IonRadio
+                                            aria-label="Custom checkbox"
+                                            slot="end"
+                                            value="no"
+                                          />
+                                        </IonItem>
+                                      </IonRadioGroup>
+                                    </div>
                                   </div>
-                                </div>
-                              );
-                            });
-                          }
-                        })}
-                        <div style={{ marginTop: "3%", marginBottom: "3%" }}>
-                          {/* <div>Notes</div> */}
-                          <Input
-                            placeholder="Notes"
-                            onChange={(e) => setNotes(e.target.value)}
-                            style={{ width: "100%" }}
-                          />
-                        </div>
-                      </Modal>
-                    </span>
+                                );
+                              });
+                            }
+                          })}
+                          <div style={{ marginTop: "3%", marginBottom: "3%" }}>
+                            {/* <div>Notes</div> */}
+                            <Input
+                              placeholder="Notes"
+                              onChange={(e) => setNotes(e.target.value)}
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        </Modal>
+                      </span>
+                      <div>
+                        <Button
+                          data-value-form={e.data.form_id}
+                          type="default"
+                          onClick={() => showEditModal(e.data.form_id)}
+                        >
+                          Edit
+                        </Button>
+                        <Modal
+                          // title="Edit Form"
+                          title={formData.map((k) => {
+                            if (k.data.form_id === selectedForm) {
+                              return k.data.form_title;
+                            }
+                          })}
+                          open={editOpen}
+                          onOk={handleEditOk}
+                          confirmLoading={editConfirmLoading}
+                          onCancel={handleEditCancel}
+                        >
+                          <div className="ddd" key={idx + 100}>
+                            <div>
+                              <Form form={form} component={false}>
+                                <Table
+                                  components={{
+                                    body: {
+                                      cell: EditableCell,
+                                    },
+                                  }}
+                                  bordered
+                                  dataSource={dataQuestions}
+                                  columns={mergedColumns}
+                                  rowClassName="editable-row"
+                                  pagination={{
+                                    onChange: cancel,
+                                  }}
+                                />
+                              </Form>
+                            </div>
+                          </div>
+                        </Modal>
+                      </div>
+                    </div>
                   </IonCard>
                 );
               })

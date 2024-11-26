@@ -10,6 +10,17 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 export const postDataWithNoAuth = (endpoint, body) => {
   return axios.post(`${baseUrl}/${endpoint}`, body);
 };
+
+export const updateDataWithNoAuth = (endpoint, body) => {
+  axios
+    .put(`${baseUrl}/${endpoint}`, body)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 export const postFormData = (body) => {
   // console.log(body);
   axios
