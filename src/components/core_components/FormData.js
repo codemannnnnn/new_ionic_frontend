@@ -115,7 +115,7 @@ export const FormData = () => {
                       >
                         {equipmentData.map((equipment, eidx) => {
                           if (equipment.equipment_id === e.data.equipment_id) {
-                            console.log(equipment);
+                            // console.log(equipment);
                             return (
                               <div key={eidx}>
                                 <strong>Hours: </strong>
