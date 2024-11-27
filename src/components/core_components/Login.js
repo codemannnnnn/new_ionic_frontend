@@ -151,7 +151,7 @@ export const Login = () => {
             >
               <Form.Item
                 name="loginusername"
-                label="Username"
+                label="Email"
                 rules={[
                   {
                     required: true,
@@ -196,7 +196,7 @@ export const Login = () => {
             >
               <Form.Item
                 name="username"
-                label="Username"
+                label="Email"
                 rules={[
                   {
                     required: true,
