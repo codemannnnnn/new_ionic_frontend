@@ -24,6 +24,7 @@ import {
   Typography,
   Popconfirm,
   Table,
+  message,
 } from "antd";
 
 import { useStore, useGrabUserInformation } from "../../state/store";
@@ -42,6 +43,7 @@ export const Forms = () => {
       return;
     } else {
       history.push("/login");
+      message.error("Please login.");
     }
   }, [userData, history]);
   const grabData = useGrabUserInformation();

@@ -47,6 +47,8 @@ import ErrorPage from "./components/error handling/ErrorPage";
 // import { useEffect } from "react";
 // import { useStore } from "zustand";
 import { Route, Switch } from "react-router-dom";
+import Password from "antd/es/input/Password";
+import PasswordReset from "./components/core_components/PasswordReset";
 // import { PrivateRoute } from "./components/auth_components/PrivateRoute";
 
 // const cookie = require("cookie");
@@ -98,6 +100,7 @@ function App() {
                   <Route exact path="/notifications">
                     <Notifications />
                   </Route>
+                  <Route path="/reset-password/:id" component={PasswordReset} />
                   <Route path="*" component={ErrorPage} />
                 </Switch>
               </IonRouterOutlet>

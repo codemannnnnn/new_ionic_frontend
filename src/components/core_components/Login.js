@@ -5,7 +5,7 @@ import { IonPage } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 
 import { useLoginUser, useRegisterUser } from "../../state/store";
-import { Form, Input, Button, Card, Space } from "antd";
+import { Form, Input, Button, Card, Space, message } from "antd";
 // import { v4 as uuidv4 } from "uuid";
 // import { Signup } from "./Signup";
 // import axios from "axios";
@@ -17,6 +17,7 @@ export const Login = () => {
   const [uName, setUname] = useState("");
   const [pass, setPass] = useState("");
   const [LoginButtonSwitchView, setLoginButtonSwitchView] = useState("Signup");
+  const [hidePasswordInput, setHidePasswordInput] = useState("block");
   //env
   // const curEnv = process.env.REACT_APP_ENVIRONMENT;
   const [loginForm] = Form.useForm();
@@ -59,7 +60,14 @@ export const Login = () => {
       };
 
       const login = async () => {
-        await logUserIn(data);
+        try {
+          await logUserIn(data);
+          message.success("Login successful.");
+        } catch (error) {
+          message.error("Invalid username or password.");
+          return;
+        }
+
         history.push("/dashboard");
       };
       login();
@@ -127,6 +135,35 @@ export const Login = () => {
     );
   };
 
+  const handleForgotPassword = () => {
+    const email = loginForm.getFieldValue("loginusername");
+    if (!email) {
+      message.error("Please enter your email address.");
+      setHidePasswordInput("none");
+      return;
+    }
+
+    fetch(`${process.env.REACT_APP_BASE_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          message.success("Password reset link has been sent to your email.");
+        } else {
+          message.success("Password reset link has been sent to your email.");
+        }
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        message.error("An error occurred. Please try again later.");
+      });
+  };
+
   return (
     <>
       <IonPage
@@ -161,6 +198,7 @@ export const Login = () => {
                 <Input />
               </Form.Item>
               <Form.Item
+                style={{ display: hidePasswordInput }}
                 name="loginpassword"
                 label="Password"
                 rules={[
@@ -173,10 +211,17 @@ export const Login = () => {
               </Form.Item>
               <Form.Item>
                 <Space>
-                  <SubmitButton loginForm={loginForm}>Submit</SubmitButton>
-                  <Button type="primary" onClick={handleSwitch}>
-                    {LoginButtonSwitchView}
-                  </Button>
+                  <div style={{ display: hidePasswordInput }}>
+                    <SubmitButton loginForm={loginForm}>Submit</SubmitButton>
+                  </div>
+                  <div style={{ display: hidePasswordInput }}>
+                    <Button type="primary" onClick={handleSwitch}>
+                      {LoginButtonSwitchView}
+                    </Button>
+                  </div>
+                  <div>
+                    <a onClick={handleForgotPassword}>Reset Password</a>
+                  </div>
                 </Space>
               </Form.Item>
             </Form>
