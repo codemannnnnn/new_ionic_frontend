@@ -215,7 +215,8 @@ export const Forms = () => {
       console.log(equipment, "from form line 215");
       equipment.forEach((e) => {
         console.log(e, "inside loop. ");
-        if (e.name === selectedEquipment.replace(/[0-9]/g, "")) {
+        // if (e.name === selectedEquipment.replace(/[0-9]/g, "")) {
+        if (e.name === selectedEquipment) {
           console.log(selectedEquipment, "selectedEquipment inside loop");
           setSelectedEquipmentID(e.equipment_id);
           setLoading(false); // Set loading to false after data is processed
