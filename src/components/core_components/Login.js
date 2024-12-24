@@ -55,7 +55,7 @@ export const Login = () => {
 
     const useHandleSubmit = (e) => {
       const data = {
-        username: values.loginusername,
+        username: values.loginusername.toLowerCase(),
         password: values.loginpassword,
       };
 
@@ -114,7 +114,7 @@ export const Login = () => {
 
     const useHandleSubmit = (e) => {
       const data = {
-        username: values.username,
+        username: values.username.toLowerCase(),
         password: values.password,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -136,13 +136,13 @@ export const Login = () => {
   };
 
   const handleForgotPassword = () => {
-    const email = loginForm.getFieldValue("loginusername");
+    var email = loginForm.getFieldValue("loginusername");
     if (!email) {
       message.error("Please enter your email address.");
       setHidePasswordInput("none");
       return;
     }
-
+    email = email.toLowerCase();
     fetch(`${process.env.REACT_APP_BASE_URL}/auth/forgot-password`, {
       method: "POST",
       headers: {
