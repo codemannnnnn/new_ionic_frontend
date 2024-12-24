@@ -210,6 +210,7 @@ export const Forms = () => {
   };
   useEffect(() => {
     // console.log(selectedEquipment);
+    console.log("loading equipment.");
     if (equipment) {
       equipment.forEach((e) => {
         if (e.name === selectedEquipment.replace(/[0-9]/g, "")) {

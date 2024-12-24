@@ -54,7 +54,7 @@ export const useGrabUserInformation = () => {
       })
 
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, [setEquipment, setQuestions, setFormInfo, setUserInfo, userIDfromCookie]);
 };

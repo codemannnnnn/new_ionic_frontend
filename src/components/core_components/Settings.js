@@ -51,7 +51,7 @@ export const Settings = () => {
         organization_id: userData.organization_id,
         user_id: userData.user_id,
       };
-      console.log(postData);
+      // console.log(postData);
       // console.log(userData);
 
       postNewEquipmentData(postData);

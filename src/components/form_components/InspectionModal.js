@@ -124,14 +124,14 @@ export const InspectionModal = () => {
   const postToBackEnd = (data) => {
     // const USERID = localStorage.getItem("id");
     const cookieUserID = cookie.parse(document.cookie).userID;
-    console.log({ cookieUserID });
+    // console.log({ cookieUserID });
     // const USERID = 1
     const formId = uuidv4();
     const formTitle = data.title;
     const endpoint = "form/template";
     const dataToArr = Object.entries(data);
     const preppedData = [];
-    console.log(dataToArr);
+    // console.log(dataToArr);
 
     dataToArr.slice(2).forEach((e, idx) => {
       // console.log(e);
