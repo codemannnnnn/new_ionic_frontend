@@ -216,12 +216,14 @@ export const Forms = () => {
       equipment.forEach((e) => {
         console.log(e, "inside loop. ");
         if (e.name === selectedEquipment.replace(/[0-9]/g, "")) {
+          console.log(selectedEquipment, "inside loop");
           setSelectedEquipmentID(e.equipment_id);
           setLoading(false); // Set loading to false after data is processed
         }
       });
     }
   }, [selectedEquipment]);
+  console.log(selectedEquipment, "outside loop");
 
   const [selectedValue, setSelectedValue] = useState("Please choose an option");
 
