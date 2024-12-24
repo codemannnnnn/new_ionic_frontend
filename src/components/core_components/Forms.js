@@ -191,14 +191,16 @@ export const Forms = () => {
         var label = e.name;
         label = <p id="form_select_validation">{label}</p>;
         tempEquipmentArr.push({
-          value: `${value}${count}`,
+          //no idea why i put count below. might have something to do with the key. i removed it for now since it broke the matching of the selected equipment when user sumbits form.
+          // value: `${value}${count}`,
+          value: `${value}`,
           label: label,
         });
         count++;
       });
       setLoading(false); // Set loading to false after data is processed
     }
-
+    // console.log({ tempEquipmentArr });
     setStateEquipment(tempEquipmentArr);
     // equipment.forEach((e) => {
   }, [equipment]);
@@ -209,22 +211,15 @@ export const Forms = () => {
     });
   };
   useEffect(() => {
-    // console.log(selectedEquipment);
-    console.log("loading equipment.");
     if (equipment) {
-      console.log(equipment, "from form line 215");
       equipment.forEach((e) => {
-        console.log(e, "inside loop. ");
-        // if (e.name === selectedEquipment.replace(/[0-9]/g, "")) {
         if (e.name === selectedEquipment) {
-          console.log(selectedEquipment, "selectedEquipment inside loop");
           setSelectedEquipmentID(e.equipment_id);
           setLoading(false); // Set loading to false after data is processed
         }
       });
     }
   }, [selectedEquipment]);
-  console.log(selectedEquipment, "selectedEquipment outside loop");
 
   const [selectedValue, setSelectedValue] = useState("Please choose an option");
 
@@ -240,15 +235,12 @@ export const Forms = () => {
       if (inputBox.textContent == null || inputBox.textContent === "") {
         // console.log("Please choose an option");
       } else {
-        // console.log("You have selected an option");
         setSelectValidation("none");
       }
     } catch (err) {
-      // console.log(err.message);
       setSelectValidation("error");
     }
   };
-  // console.log(selectedEquipmentID);
 
   //edit modal functions
   const [editOpen, setEditOpen] = useState(false);
