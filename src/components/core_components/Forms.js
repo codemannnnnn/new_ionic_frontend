@@ -30,7 +30,7 @@ import {
 import { useStore, useGrabUserInformation } from "../../state/store";
 import { postFormData } from "../../customHooks/useUserUtils";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { updateDataWithNoAuth } from "../../customHooks/useUserUtils";
 const cookie = require("cookie");
@@ -74,8 +74,29 @@ export const Forms = () => {
 
   const cookieUserID = cookie.parse(document.cookie).userID;
 
-  // console.log("calling a refresh...");
-  // useGrabUserInformation();
+  // console.log(selectedForm);
+  //dyanmic modal open here
+  const location = useLocation();
+  useEffect(() => {
+    // Check for the "form" query parameter in the URL
+    const queryParams = new URLSearchParams(location.search);
+    const formId = queryParams.get("form");
+
+    if (formId) {
+      setSelectedForm(formId); // Set the selected form
+      setOpen(true); // Open the modal
+    }
+  }, [location.search]);
+
+  const showDynamicModal = (event) => {
+    const currentFormSelected =
+      event.currentTarget.getAttribute("data-value-form");
+    setSelectedForm(currentFormSelected);
+    setOpen(true);
+
+    // Update the URL with the selected form ID
+    history.push(`?form=${currentFormSelected}`);
+  };
 
   const showModal = (event) => {
     const currentFormSelected =
@@ -83,6 +104,7 @@ export const Forms = () => {
     // console.log(currentFormSelected);
     setSelectedForm(currentFormSelected);
     setOpen(true);
+    history.push(`?form=${currentFormSelected}`);
   };
   // console.log(questionAnswers);
 
@@ -169,6 +191,7 @@ export const Forms = () => {
 
   const handleCancel = () => {
     setOpen(false);
+    history.push("/forms"); // Clear the query parameter from the URL
     resetQuestions();
   };
 

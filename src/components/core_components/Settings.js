@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { postNewEquipmentData } from "../../customHooks/useUserUtils";
 import { InspectionModal } from "../form_components/InspectionModal";
 import { useStore } from "../../state/store";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 export const Settings = () => {
   // const [name, setName] = useState("");
@@ -158,6 +159,18 @@ export const Settings = () => {
             {formButtonTitle}
           </Button> */}
           {/* <div className={`fade-in-flex ${formActive}`}> */}
+          <Card
+            title=""
+            bordered={false}
+            style={{
+              textAlign: "left",
+            }}
+          >
+            <div>{/* <InspectionModal /> */}</div>
+            {/* <Button type="primary" onClick={handleOpen}> */}
+            <QRCodeGenerator />
+            {/* </Button> */}
+          </Card>
           <Card
             title=""
             bordered={false}

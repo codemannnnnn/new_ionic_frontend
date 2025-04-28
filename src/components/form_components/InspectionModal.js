@@ -68,32 +68,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
             <Select.Option value="forklift">Forklift</Select.Option>
           </Select>
         </Form.Item>
-        {/* WIRE THIS UP IN THE BACKEND */}
-        {/* <Form.Item
-          name="hours"
-          label="Hours"
-          rules={[
-            {
-              required: true,
-              message: "Please input the hours!",
-            },
-          ]}
-        >
-          <Input name="form_hours" />
-        </Form.Item> */}
-        {/* WIRE THIS UP IN THE BACKEND */}
-        {/* <Form.Item
-          name="notes"
-          label="Notes"
-          rules={[
-            {
-              required: true,
-              message: "Please input the notes here!",
-            },
-          ]}
-        >
-          <Input name="form_notes" />
-        </Form.Item> */}
+
         <Form.Item name="question-1" label="Question">
           <Input type="textarea" />
         </Form.Item>
