@@ -21,6 +21,8 @@ export const useStore = create(
       dashboardInfo: [],
       setDashboardInfo: (dashboardInfo) =>
         set({ dashboardInfo: dashboardInfo }),
+      setQRCodes: (qrCodes) => set({ qrCodes: qrCodes }),
+      qrCodes: [],
     }),
 
     {
@@ -36,6 +38,7 @@ export const useGrabUserInformation = () => {
   const setFormInfo = useStore((e) => e.setFormInfo);
   const setQuestions = useStore((e) => e.setQuestions);
   const setEquipment = useStore((e) => e.setEquipment);
+  const setQRCodes = useStore((e) => e.setQRCodes);
   // const cookies = cookie.parse(document.cookie);
   // console.log(cookie.parse(document.cookie).userID, "cody");
   const userIDfromCookie = cookie.parse(document.cookie).userID;
@@ -50,13 +53,21 @@ export const useGrabUserInformation = () => {
         setUserInfo(res.data.user);
         setFormInfo(res.data.form);
         setQuestions(res.data.form[0].formQuestions);
+        setQRCodes(res.data.qrcode);
         // console.log(res.data);
       })
 
       .catch((err) => {
         // console.log(err);
       });
-  }, [setEquipment, setQuestions, setFormInfo, setUserInfo, userIDfromCookie]);
+  }, [
+    setEquipment,
+    setQuestions,
+    setFormInfo,
+    setUserInfo,
+    userIDfromCookie,
+    setQRCodes,
+  ]);
 };
 
 // export const usePullTheDataIn = () => {

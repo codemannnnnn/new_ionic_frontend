@@ -185,9 +185,37 @@ ion-radio.radio-checked::part(mark) {
 .login-card {
   width: 50%;
 }
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.qr-code-grid {
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: row;
+  /* align-items: center; */
+}
+.qr-code-item {
+  /* padding: 50%; */
+  /* margin: 5%; */
+  margin: auto;
+  /* border: 1px solid red; */
+  padding-left: 1%;
+  width: 100px;
+}
+
 @media (max-width: 500px) {
   .App-header {
     font-size: calc(8px + 2vmin);
+  }
+  .qr-code-grid {
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    /* align-items: center; */
   }
 
   .card-padding-mid {

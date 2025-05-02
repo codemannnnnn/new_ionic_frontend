@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { Button, Form, Input, Space, Card, Select, Modal } from "antd";
 import { useStore, useGrabUserInformation } from "../../state/store";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState(""); // URL to encode
@@ -9,25 +11,52 @@ export default function QRCodeGenerator() {
   const qrRef = useRef(null); // Reference to the QR code div
   const [open, setOpen] = useState(false);
   const formData = useStore((state) => state.formInfo);
+  const userData = useStore((state) => state.userInfo);
+  const qrCodes = useStore((state) => state.qrCodes);
+  // console.log(qrCodes);
+
   const [cleanFormData, setCleanFormData] = useState([]);
   const [selectedForm, setSelectedForm] = useState(null);
 
-  useEffect(() => {
-    const allData = formData.map((e) => e.data);
-    setCleanFormData(allData);
-  }, [formData]);
-  //   console.log(cleanFormData);
+  const [qrCodeBase64, setQrCodeBase64] = useState(null);
+  const [curFormId, setCurFormId] = useState(null);
+  const [curUserId, setCurUserId] = useState(null);
+  const [curOrgId, setCurOrgId] = useState(null);
+
+  const [equipmentActive, setEquipmentActive] = useState("");
+  const [showQRCodeDiv, setShowQRCodeDiv] = useState("");
+  const [formActive, setFormActive] = useState("");
+  const [createQRCodeButton, setcreateQRCodeButton] =
+    useState("Create QR Code");
+  const [showQRCodes, setshowQRCodes] = useState("View QR Codes");
+  const [formButtonTitle, setFormButtonTitle] = useState("Add Form");
+
+  // const [confirmLoading, setConfirmLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // Step 1: State for loading
+
+  const [form] = Form.useForm();
+
   const handleGenerateQRCode = () => {
-    const element = document
-      .getElementById("qr-select-active")
-      .getAttribute("data-value");
-    if (!element) return;
-    setSelectedForm(element);
+    const element = document;
+    //   .getElementById("qr-select-active")
+    //   .getAttribute("data-value");
+    // if (!element) return;
+    // setSelectedForm(element);
     // console.log(element.getAttribute("data-value"), "selectedForm");
-    setUrl(`${process.env.REACT_APP_BASE_FRONTEND_URL}/forms?form=${element}`); // Set your endpoint here
+    setUrl(
+      `${process.env.REACT_APP_BASE_FRONTEND_URL}/forms?form=${curFormId}`
+    ); // Set your endpoint here
     setQrVisible(true);
+    // await handleSaveQRCode();
   };
-  //   console.log(process.env.REACT_APP_BASE_FRONTEND_URL);
+
+  useEffect(() => {
+    // console.log("changed");
+    if (qrVisible) {
+      handleSaveQRCode();
+    }
+  }, [qrVisible]);
+
   const handleSaveQRCode = async () => {
     const svg = qrRef.current.querySelector("svg");
     if (!svg) return;
@@ -58,181 +87,262 @@ export default function QRCodeGenerator() {
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify({ image: pngBase64 }),
       // });
+      setQrCodeBase64(pngBase64);
     };
+
     img.src = url;
   };
+  const SubmitButton = ({ form, children }) => {
+    const [submittable, setSubmittable] = useState(false);
 
-  //   console.log(selectedForm, "selectedForm");
+    // Watch all values
+    const values = Form.useWatch([], form);
+    // console.log(values.name);
+    // setName = values.name;
+    // setType = values.type;
+    useEffect(() => {
+      form
+        .validateFields({
+          validateOnly: true,
+        })
+        .then(() => setSubmittable(true))
+        .catch(() => setSubmittable(false));
+    }, [form, values]);
 
-  const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
-    const [form] = Form.useForm();
-    const [questionArr, setQuestionArr] = useState(new Array(0).fill(1));
-    const [initInputs, setInitInputs] = useState(1);
-
-    const addOneToQuestionArray = () => {
-      setQuestionArr(new Array(initInputs).fill(1));
-      setInitInputs(initInputs + 1);
+    const handleSubmit = () => {
+      const postData = {
+        qrcode_id: uuidv4(),
+        qrcode_img: qrCodeBase64,
+        form_id: curFormId,
+        qrcode_label: values.name,
+        user_id: userData.user_id,
+        organization_id: userData.organization_id,
+      };
+      console.log(postData);
+      postToBackEnd(postData);
     };
-
-    const resetForm = () => {
-      setInitInputs(1);
-      setQuestionArr(new Array(0).fill(1));
-    };
-    // console.log(cleanFormData);
     return (
-      <Modal
-        open={open}
-        title="Generate New QR Code"
-        okText="Create"
-        cancelText="Cancel"
-        onCancel={onCancel}
-        onOk={() => {
-          form
-            .validateFields()
-            .then((values) => {
-              form.resetFields();
-              onCreate(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
+      <Button
+        type="primary"
+        htmlType="submit"
+        disabled={!submittable}
+        onClick={handleSubmit}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          name="form_in_modal"
-          // initialValues={{
-          //   modifier: "public",
-          // }}
-        >
-          {/* <Form.Item
-            name="title"
-            label="Title"
-            rules={[
-              {
-                required: true,
-                message: "Please input the title of collection of questions!",
-              },
-            ]}
-          >
-            <Input name="form_title" />
-          </Form.Item> */}
-
-          <Form.Item
-            name="type"
-            label="Please select the form to use for this QR code."
-          >
-            <Select
-              //   value={selectedForm || undefined} // Ensure the selected value persists
-              onChange={(value) => {
-                // setSelectedForm(value);
-                const options = document.querySelectorAll(
-                  ".ant-select-item-option"
-                );
-                options.forEach((option) => {
-                  //   console.log(value, "id");
-                  //   console.log(option.getAttribute("data-value"), "value");
-                  if (option.getAttribute("data-value") === value) {
-                    option.id = "qr-select-active";
-                  } else {
-                    option.removeAttribute("id");
-                  }
-                });
-              }}
-            >
-              {formData.map((e, idx) => (
-                <Select.Option
-                  key={idx}
-                  value={e.data.form_id}
-                  data-value={e.data.form_id} // Explicitly set data-value
-                >
-                  {e.data.form_title}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          {/* <Form.Item name="question-1" label="Question">
-            <Input type="textarea" />
-          </Form.Item> */}
-          {/* {questionArr.map((e, idx) => {
-            return (
-              <Form.Item key={idx} name={`question-${idx + 2}`} label="Question">
-                <Input type="textarea" />
-              </Form.Item>
-            );
-          })} */}
-          <Form.Item>
-            <Button type="primary" onClick={handleGenerateQRCode}>
-              Generate QR Code
-            </Button>
-            {/* <Button style={{ marginLeft: "8px" }} onClick={resetForm}>
-              Reset
-            </Button> */}
-            {/* <QRCode value={url} /> */}
-            {qrVisible && (
-              <div className="mt-4" ref={qrRef}>
-                <QRCode value={url} />
-                <Button
-                  onClick={handleSaveQRCode}
-                  className="bg-green-500 text-white p-2 rounded mt-2"
-                >
-                  Save QR Code
-                </Button>
-              </div>
-            )}
-          </Form.Item>
-        </Form>
-      </Modal>
+        {children}
+      </Button>
     );
   };
-  //   console.log(open);
-  const onCreate = (values) => {
-    console.log("Received values of form: ", values);
-    // postToBackEnd(values);
-    handleGenerateQRCode();
-    setOpen(false);
+  // console.log(process.env.REACT_APP_BASE_URL);
+
+  const postToBackEnd = async (body) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/qrcode/saveqrcode`,
+        body
+      );
+      console.log("QR Code saved successfully:", response.data);
+    } catch (error) {
+      console.error("Error saving QR Code:", error);
+    }
   };
+
+  const handleCreateQRCode = (e) => {
+    var curVal = e.target.innerText;
+    if (curVal === "Create QR Code") {
+      setEquipmentActive(equipmentActive === "" ? "active" : "");
+      setcreateQRCodeButton(
+        createQRCodeButton === "Create QR Code" ? "Close" : "Create QR Code"
+      );
+    } else if (curVal === "Close") {
+      setEquipmentActive(equipmentActive === "" ? "active" : "");
+      setcreateQRCodeButton(
+        createQRCodeButton === "Create QR Code" ? "Close" : "Create QR Code"
+      );
+      // setFormActive(formActive === "" ? "active" : "");
+      // setFormButtonTitle(formButtonTitle === "Add Form" ? "Close" : "Add Form");
+    }
+  };
+
+  const handleViewQRCode = (e) => {
+    var curVal = e.target.innerText;
+    if (curVal === "View QR Codes") {
+      setShowQRCodeDiv(showQRCodeDiv === "" ? "active" : "");
+      setshowQRCodes(
+        showQRCodes === "View QR Codes" ? "Close" : "View QR Codes"
+      );
+    } else if (curVal === "Close") {
+      setShowQRCodeDiv(showQRCodeDiv === "" ? "active" : "");
+      setshowQRCodes(
+        showQRCodes === "View QR Codes" ? "Close" : "View QR Codes"
+      );
+      // setFormActive(formActive === "" ? "active" : "");
+      // setFormButtonTitle(formButtonTitle === "Add Form" ? "Close" : "Add Form");
+    }
+  };
+
+  const handleChange = (value) => {
+    // console.log(`selected ${value}`);
+    setCurFormId(value);
+  };
+
+  // console.log(qrCodeBase64);
+
+  useEffect(() => {
+    formData.map((e, index) => {
+      setCleanFormData((prevData) => {
+        const uniqueForms = new Map(prevData.map((item) => [item.label, item]));
+        if (!uniqueForms.has(e.data.form_title)) {
+          uniqueForms.set(e.data.form_title, {
+            key: `${e.data.form_title}-${index}-${uuidv4()}`,
+            value: `${e.data.form_id}`,
+            label: e.data.form_title,
+          });
+          // setCurFormId(e.data.form_id);
+        }
+        return Array.from(uniqueForms.values());
+      });
+    });
+  }, [formData]);
+  const handlePrint = (qrCode) => {
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print QR Code</title>
+          </head>
+          <body>
+            <div style="text-align: center;">
+              <p>${qrCode.qrcode_label}</p>
+              <img src="${qrCode.qrcode_img}" alt="QR Code" style="width: 150px; height: 150px;" />
+            </div>
+            <script>
+              window.onload = function() {
+                window.print();
+                window.close();
+              };
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+  // console.log(curFormId);
 
   return (
     <div className="p-4">
-      {/* <Button
-        onClick={handleGenerateQRCode}
-        className="bg-blue-500 text-white p-2 rounded"
-        type="primary"
-      >
-        Generate QR Code
+      <Button type="" onClick={handleViewQRCode}>
+        {showQRCodes}
       </Button>
 
-      {qrVisible && (
-        <div className="mt-4" ref={qrRef}>
-          <QRCode value={url} />
-          <Button
-            onClick={handleSaveQRCode}
-            className="bg-green-500 text-white p-2 rounded mt-2"
-          >
-            Save QR Code
-          </Button>
-        </div>
-      )} */}
-      <div>
-        <Button
-          type="primary"
-          onClick={() => {
-            setOpen(true);
-            // handleGenerateQRCode();
-          }}
+      <Button
+        type="primary"
+        onClick={handleCreateQRCode}
+        style={{ marginLeft: "10px" }}
+      >
+        {createQRCodeButton}
+      </Button>
+      <div className={`fade-in-flex ${equipmentActive}`}>
+        <Form
+          form={form}
+          name="qrcodeForm"
+          layout="vertical"
+          autoComplete="off"
+          style={{ width: "100%" }}
         >
-          Generate QR Code
-        </Button>
-        <CollectionCreateForm
-          open={open}
-          onCreate={onCreate}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
+          <div
+          // style={{
+          //   display: "flex",
+          //   flexDirection: "row",
+          //   // alignItems: "center",
+          // }}
+          >
+            <div>
+              <div>
+                <Form.Item
+                  name="form_choice"
+                  label="Please choose a form."
+                  // rules={[{ required: true }]}
+                >
+                  <Space wrap>
+                    <Select
+                      defaultValue="Options..."
+                      style={{ width: 200 }}
+                      onChange={handleChange}
+                      options={cleanFormData}
+                    />
+                  </Space>
+                </Form.Item>
+                <Form.Item
+                  name="name"
+                  label="Name"
+                  style={{ width: 200 }}
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </div>
+              <div>
+                <Form.Item>
+                  <Space>
+                    <Button type="primary" onClick={handleGenerateQRCode}>
+                      Generate QR Code
+                    </Button>
+
+                    <SubmitButton form={form}>Submit</SubmitButton>
+                    <Button htmlType="reset">Reset</Button>
+                  </Space>
+                </Form.Item>
+              </div>
+            </div>
+            <div>
+              {qrVisible && (
+                <div className="mt-4" ref={qrRef}>
+                  <QRCode value={url} size={100} />
+                </div>
+              )}
+            </div>
+          </div>
+        </Form>
+        {/* <Space wrap>
+          <Select
+            defaultValue="Options..."
+            style={{ width: 200 }}
+            onChange={handleChange}
+            options={cleanFormData}
+          />
+        </Space> */}
+      </div>
+
+      <div className={`fade-in-flex ${showQRCodeDiv}`}>
+        {" "}
+        <div className="qr-code-grid">
+          {qrCodes.map((e) => {
+            return (
+              <div key={e.qrcode_id} className="qr-code-item">
+                <div>
+                  <p>{e.qrcode_label}</p>
+                  <img
+                    src={e.qrcode_img}
+                    alt="QR Code"
+                    style={{ width: 75, height: 75 }}
+                  />
+                  <Button
+                    style={{ width: "75px" }}
+                    onClick={() => handlePrint(e)}
+                  >
+                    Print
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
