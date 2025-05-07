@@ -39,35 +39,26 @@ export const useGrabUserInformation = () => {
   const setQuestions = useStore((e) => e.setQuestions);
   const setEquipment = useStore((e) => e.setEquipment);
   const setQRCodes = useStore((e) => e.setQRCodes);
-  // const cookies = cookie.parse(document.cookie);
-  // console.log(cookie.parse(document.cookie).userID, "cody");
   const userIDfromCookie = cookie.parse(document.cookie).userID;
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/user_data/${userIDfromCookie}`)
-      // `${process.env.REACT_APP_BASE_URL}/user_data/1`
 
-      .then((res) => {
-        // console.log(res.data.equipment, "cody");
-        setEquipment(res.data.equipment);
-        setUserInfo(res.data.user);
-        setFormInfo(res.data.form);
-        setQuestions(res.data.form[0].formQuestions);
-        setQRCodes(res.data.qrcode);
-        // console.log(res.data);
-      })
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/user_data/${userIDfromCookie}`
+      );
 
-      .catch((err) => {
-        // console.log(err);
-      });
-  }, [
-    setEquipment,
-    setQuestions,
-    setFormInfo,
-    setUserInfo,
-    userIDfromCookie,
-    setQRCodes,
-  ]);
+      // Update the store with the fetched data
+      setEquipment(res.data.equipment);
+      setUserInfo(res.data.user);
+      setFormInfo(res.data.form);
+      setQuestions(res.data.form[0].formQuestions);
+      setQRCodes(res.data.qrcode);
+    } catch (err) {
+      console.error("Error fetching user information:", err);
+    }
+  };
+
+  return fetchData; // Return the function so it can be called explicitly
 };
 
 // export const usePullTheDataIn = () => {

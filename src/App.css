@@ -196,6 +196,7 @@ ion-radio.radio-checked::part(mark) {
   display: flex;
   /* justify-content: center; */
   flex-direction: row;
+  flex-wrap: wrap;
   /* align-items: center; */
 }
 .qr-code-item {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // import { settingsOutline } from "ionicons/icons";
-import { IonPage } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
 import { Button, Form, Input, Space, Card, Select } from "antd";
 // import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
@@ -96,117 +96,119 @@ export const Settings = () => {
   return (
     <>
       <IonPage>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // border: "1px solid #e8e8e8",
-            // margin: "2%",
-            // padding: "2%",
-            justifyContent: "space-between",
-          }}
-        >
-          <Card>
-            <div
-              title=""
-              // bordered={false}
-              style={{
-                textAlign: "left",
-                // border: "1px solid red",
-              }}
-            >
-              {/* <h6>Add New Equipment</h6> */}
-              <div className="title">Equipment</div>
-              <Button type="primary" onClick={handleOpen}>
-                {equipmentButtonTitle}
-              </Button>
-              <div className={`fade-in-flex ${equipmentActive}`}>
-                <Form
-                  form={form}
-                  name="equipmentForm"
-                  layout="vertical"
-                  autoComplete="off"
-                  style={{ width: "100%" }}
-                >
-                  <Form.Item
-                    name="name"
-                    label="Name"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
+        <IonContent fullscreen>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              // border: "1px solid #e8e8e8",
+              // margin: "2%",
+              // padding: "2%",
+              justifyContent: "space-between",
+            }}
+          >
+            <Card>
+              <div
+                title=""
+                // bordered={false}
+                style={{
+                  textAlign: "left",
+                  // border: "1px solid red",
+                }}
+              >
+                {/* <h6>Add New Equipment</h6> */}
+                <div className="title">Equipment</div>
+                <Button type="primary" onClick={handleOpen}>
+                  {equipmentButtonTitle}
+                </Button>
+                <div className={`fade-in-flex ${equipmentActive}`}>
+                  <Form
+                    form={form}
+                    name="equipmentForm"
+                    layout="vertical"
+                    autoComplete="off"
+                    style={{ width: "100%" }}
                   >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    name="type"
-                    label="Type"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <Select
-                      options={[
+                    <Form.Item
+                      name="name"
+                      label="Name"
+                      rules={[
                         {
-                          label: "Forklift",
-                          value: "forklift",
+                          required: true,
                         },
                       ]}
-                    />
-                  </Form.Item>
-                  <Form.Item>
-                    <Space>
-                      <SubmitButton form={form}>Submit</SubmitButton>
-                      <Button htmlType="reset">Reset</Button>
-                    </Space>
-                  </Form.Item>
-                </Form>
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      name="type"
+                      label="Type"
+                      rules={[
+                        {
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <Select
+                        options={[
+                          {
+                            label: "Forklift",
+                            value: "forklift",
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Space>
+                        <SubmitButton form={form}>Submit</SubmitButton>
+                        <Button htmlType="reset">Reset</Button>
+                      </Space>
+                    </Form.Item>
+                  </Form>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          {/* <Button type="primary" onClick={handleOpen} value="form">
+            {/* <Button type="primary" onClick={handleOpen} value="form">
             {formButtonTitle}
           </Button> */}
-          {/* <div className={`fade-in-flex ${formActive}`}> */}
+            {/* <div className={`fade-in-flex ${formActive}`}> */}
 
-          <Card>
-            <div
-              title=""
-              // bordered={false}
-              style={{
-                textAlign: "left",
-                // border: "1px solid red",
-              }}
-            >
-              <div className="title">Forms</div>
+            <Card>
+              <div
+                title=""
+                // bordered={false}
+                style={{
+                  textAlign: "left",
+                  // border: "1px solid red",
+                }}
+              >
+                <div className="title">Forms</div>
 
-              <div>
-                <InspectionModal />
+                <div>
+                  <InspectionModal />
+                </div>
               </div>
-            </div>
-          </Card>
-          <Card>
-            <div
-              title=""
-              // bordered={false}
-              style={{
-                textAlign: "left",
-                // border: "1px solid red",
-              }}
-            >
-              {/* <Button type="primary" onClick={handleOpen}> */}
-              <div className="title">QR Code</div>
+            </Card>
+            <Card>
+              <div
+                title=""
+                // bordered={false}
+                style={{
+                  textAlign: "left",
+                  // border: "1px solid red",
+                }}
+              >
+                {/* <Button type="primary" onClick={handleOpen}> */}
+                <div className="title">QR Code</div>
 
-              <QRCodeGenerator />
+                <QRCodeGenerator />
 
-              {/* </Button> */}
-            </div>
-          </Card>
-        </div>
+                {/* </Button> */}
+              </div>
+            </Card>
+          </div>
+        </IonContent>
       </IonPage>
     </>
   );

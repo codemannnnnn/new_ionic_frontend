@@ -46,7 +46,11 @@ export const Forms = () => {
       message.error("Please login.");
     }
   }, [userData, history]);
-  const grabData = useGrabUserInformation();
+  // const grabData = useGrabUserInformation();
+  const fetchData = useGrabUserInformation();
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const formData = useStore((state) => state.formInfo);
   const equipment = useStore((state) => state.equipment);

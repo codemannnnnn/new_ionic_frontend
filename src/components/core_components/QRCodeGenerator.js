@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
-import { Button, Form, Input, Space, Card, Select, Modal } from "antd";
+import { Button, Form, Input, Space, Card, Select, Modal, message } from "antd";
 import { useStore, useGrabUserInformation } from "../../state/store";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
@@ -10,6 +10,7 @@ export default function QRCodeGenerator() {
   const [qrVisible, setQrVisible] = useState(false);
   const qrRef = useRef(null); // Reference to the QR code div
   const [open, setOpen] = useState(false);
+  const [qrModal, setQrModal] = useState(false);
   const formData = useStore((state) => state.formInfo);
   const userData = useStore((state) => state.userInfo);
   const qrCodes = useStore((state) => state.qrCodes);
@@ -20,8 +21,9 @@ export default function QRCodeGenerator() {
 
   const [qrCodeBase64, setQrCodeBase64] = useState(null);
   const [curFormId, setCurFormId] = useState(null);
-  const [curUserId, setCurUserId] = useState(null);
-  const [curOrgId, setCurOrgId] = useState(null);
+  const [qrCodeLabel, setQrCodeLabel] = useState(null);
+
+  const [generateQRCodeLoading, setGenerateQRCodeLoading] = useState(false);
 
   const [equipmentActive, setEquipmentActive] = useState("");
   const [showQRCodeDiv, setShowQRCodeDiv] = useState("");
@@ -30,7 +32,14 @@ export default function QRCodeGenerator() {
     useState("Create QR Code");
   const [showQRCodes, setshowQRCodes] = useState("View QR Codes");
   const [formButtonTitle, setFormButtonTitle] = useState("Add Form");
+  const fetchData = useGrabUserInformation();
+  // const useHandleFetchUserInfo = () => {
+  // useGrabUserInformation();
+  //   grabData(); // Call the function returned by the hook
+  // };
 
+  // Example button to trigger it
+  // <Button onClick={handleFetchUserInfo}>Fetch User Info</Button>
   // const [confirmLoading, setConfirmLoading] = useState(false);
   // const [loading, setLoading] = useState(false); // Step 1: State for loading
 
@@ -47,7 +56,19 @@ export default function QRCodeGenerator() {
       `${process.env.REACT_APP_BASE_FRONTEND_URL}/forms?form=${curFormId}`
     ); // Set your endpoint here
     setQrVisible(true);
-    // await handleSaveQRCode();
+    setGenerateQRCodeLoading(true);
+    setTimeout(() => {
+      hiddenSaveButton();
+      setEquipmentActive(equipmentActive === "" ? "active" : "");
+      setcreateQRCodeButton(
+        createQRCodeButton === "Create QR Code" ? "Close" : "Create QR Code"
+      );
+      setQrModal(true);
+      setGenerateQRCodeLoading(false);
+      resetQRCodeForm();
+      fetchData();
+      message.success("New QR Code Generated");
+    }, 1000);
   };
 
   useEffect(() => {
@@ -110,6 +131,7 @@ export default function QRCodeGenerator() {
     }, [form, values]);
 
     const handleSubmit = () => {
+      setQrCodeLabel(values.name);
       const postData = {
         qrcode_id: uuidv4(),
         qrcode_img: qrCodeBase64,
@@ -117,6 +139,7 @@ export default function QRCodeGenerator() {
         qrcode_label: values.name,
         user_id: userData.user_id,
         organization_id: userData.organization_id,
+        qrcode_address: url,
       };
       console.log(postData);
       postToBackEnd(postData);
@@ -177,6 +200,23 @@ export default function QRCodeGenerator() {
       );
       // setFormActive(formActive === "" ? "active" : "");
       // setFormButtonTitle(formButtonTitle === "Add Form" ? "Close" : "Add Form");
+    }
+  };
+
+  const hiddenSaveButton = () => {
+    const saveButton = document.querySelector("#qrcode-submit-button button");
+    if (saveButton) {
+      // saveButton.style.display = "none";
+      saveButton.click();
+    }
+  };
+
+  const resetQRCodeForm = () => {
+    const resetButton = document.querySelector(
+      "#qrcodeForm > div > div:nth-child(1) > div:nth-child(2) > div > div > div > div > div > div > div:nth-child(3) > button"
+    );
+    if (resetButton) {
+      resetButton.click();
     }
   };
 
@@ -290,22 +330,44 @@ export default function QRCodeGenerator() {
               <div>
                 <Form.Item>
                   <Space>
-                    <Button type="primary" onClick={handleGenerateQRCode}>
+                    <Button
+                      type="primary"
+                      onClick={handleGenerateQRCode}
+                      loading={generateQRCodeLoading}
+                    >
                       Generate QR Code
                     </Button>
-
-                    <SubmitButton form={form}>Submit</SubmitButton>
+                    <span id="qrcode-submit-button" style={{ display: "none" }}>
+                      <SubmitButton form={form}>Submit</SubmitButton>
+                    </span>
                     <Button htmlType="reset">Reset</Button>
                   </Space>
                 </Form.Item>
               </div>
-            </div>
-            <div>
               {qrVisible && (
-                <div className="mt-4" ref={qrRef}>
+                <div style={{ display: "none" }} className="mt-4" ref={qrRef}>
                   <QRCode value={url} size={100} />
                 </div>
               )}
+            </div>
+            <div>
+              <Modal
+                open={qrModal}
+                width="20%"
+                title={qrCodeLabel}
+                okText="Create"
+                footer={null} // Remove the footer to hide the "OK" button
+                cancelText="Cancel"
+                onCancel={() => {
+                  setQrModal(false);
+                }}
+              >
+                {qrVisible && (
+                  <div className="mt-4" ref={qrRef}>
+                    <QRCode value={url} size={100} />
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </Form>
