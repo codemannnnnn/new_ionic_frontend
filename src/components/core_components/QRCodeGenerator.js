@@ -350,10 +350,12 @@ export default function QRCodeGenerator() {
                 </div>
               )}
             </div>
-            <div>
+            <div c>
               <Modal
                 open={qrModal}
-                width="20%"
+                // width="20%"
+                className="qr-code-modal"
+                centered
                 title={qrCodeLabel}
                 okText="Create"
                 footer={null} // Remove the footer to hide the "OK" button

@@ -207,8 +207,14 @@ ion-radio.radio-checked::part(mark) {
   padding-left: 1%;
   width: 100px;
 }
+.qr-code-modal {
+  width: 20% !important;
+}
 
 @media (max-width: 500px) {
+  .qr-code-modal {
+    width: 40% !important;
+  }
   .App-header {
     font-size: calc(8px + 2vmin);
   }
