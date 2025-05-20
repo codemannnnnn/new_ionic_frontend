@@ -34,7 +34,8 @@ export const Dashboard = (render) => {
         <IonContent fullscreen>
           {userData && (
             <>
-              {userData.role_id === 1 && <FormCards />}
+              {(userData.role_id === 1 && <FormCards />) ||
+                (userData.role_id === 69 && <FormCards />)}
               <FormData />
             </>
           )}

@@ -42,6 +42,7 @@ import { Forms } from "./components/core_components/Forms";
 import { Profile } from "./components/core_components/Profile";
 import { Settings } from "./components/core_components/Settings";
 import { Notifications } from "./components/core_components/Notifications";
+import { Admin } from "./components/core_components/Admin";
 import ErrorBoundary from "./components/error handling/ErrorBoundary";
 import ErrorPage from "./components/error handling/ErrorPage";
 // import { useEffect } from "react";
@@ -99,6 +100,9 @@ function App() {
                   </Route>
                   <Route exact path="/notifications">
                     <Notifications />
+                  </Route>
+                  <Route exact path="/admin">
+                    <Admin />
                   </Route>
                   <Route path="/reset-password/:id" component={PasswordReset} />
                   <Route path="*" component={ErrorPage} />

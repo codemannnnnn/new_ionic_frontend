@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { IonPage } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
 
 import { useHistory } from "react-router-dom";
 
@@ -118,6 +118,7 @@ export const Login = () => {
         password: values.password,
         firstName: values.firstName,
         lastName: values.lastName,
+        organization: values.organization,
         organization_id: values.organization_id,
         role_id: 2, //hardcoded for now (operators.)
       };
@@ -176,6 +177,7 @@ export const Login = () => {
           paddingTop: "20px",
         }}
       >
+        {/* <IonContent fullscreen> */}
         <Card className="login-card">
           <div className="login">
             <Form
@@ -284,6 +286,17 @@ export const Login = () => {
                 <Input />
               </Form.Item>
               <Form.Item
+                name="organization"
+                label="Organization"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
                 name="organization_id"
                 label="Organization ID"
                 rules={[
@@ -307,6 +320,7 @@ export const Login = () => {
             </Form>
           </div>
         </Card>
+        {/* </IonContent> */}
       </IonPage>
     </>
   );

@@ -210,7 +210,20 @@ ion-radio.radio-checked::part(mark) {
 .qr-code-modal {
   width: 20% !important;
 }
+.admin-section-title {
+  display: flex;
+  margin-left: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
 
+.admin-input-box {
+  display: flex;
+  /* margin-left: 0.9rem;
+  font-weight: bold;
+  font-size: 1.2rem; */
+  /* width: 100px; */
+}
 @media (max-width: 500px) {
   .qr-code-modal {
     width: 40% !important;

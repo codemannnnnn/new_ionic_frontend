@@ -150,8 +150,8 @@ export const FormData = () => {
           return acc;
         }, tempArr);
       }
-      //1 is the role_id for admin. show all forms submitted for that organization.
-      if (userData.role_id === 1) {
+      //1 is the role_id for org admin. show all forms submitted for that organization.
+      if (userData.role_id === 1 || userData.role_id === 69) {
         formData.map((e, idx) => {
           // console.log(e);
           // try {
@@ -268,6 +268,8 @@ export const FormData = () => {
           onChange={handleTableChange}
           pagination={tableParams.pagination}
           size="small"
+          // pagination={{ pageSize: 10 }}
+          // scroll={{ y: 55 * 5 }}
           expandable={{
             expandedRowRender: (record) => (
               <div

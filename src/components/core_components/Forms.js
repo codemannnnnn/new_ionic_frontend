@@ -31,7 +31,6 @@ import { useStore, useGrabUserInformation } from "../../state/store";
 import { postFormData } from "../../customHooks/useUserUtils";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-
 import { updateDataWithNoAuth } from "../../customHooks/useUserUtils";
 const cookie = require("cookie");
 export const Forms = () => {
@@ -551,6 +550,7 @@ export const Forms = () => {
                             onChange={handleInputChanges}
                             options={stateEquipment}
                           />
+                          {/* {console.log(stateEquipment)} */}
                           {/* <div className="split-two"> */}
                           {/* <span>Hours</span> */}
                           <div style={{ marginTop: "3%", marginBottom: "3%" }}>

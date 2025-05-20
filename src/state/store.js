@@ -23,6 +23,8 @@ export const useStore = create(
         set({ dashboardInfo: dashboardInfo }),
       setQRCodes: (qrCodes) => set({ qrCodes: qrCodes }),
       qrCodes: [],
+      setAdminData: (adminData) => set({ adminData: adminData }),
+      adminData: [],
     }),
 
     {
@@ -39,6 +41,7 @@ export const useGrabUserInformation = () => {
   const setQuestions = useStore((e) => e.setQuestions);
   const setEquipment = useStore((e) => e.setEquipment);
   const setQRCodes = useStore((e) => e.setQRCodes);
+  const setAdminData = useStore((e) => e.setAdminData);
   const userIDfromCookie = cookie.parse(document.cookie).userID;
 
   const fetchData = async () => {
@@ -53,6 +56,7 @@ export const useGrabUserInformation = () => {
       setFormInfo(res.data.form);
       setQuestions(res.data.form[0].formQuestions);
       setQRCodes(res.data.qrcode);
+      setAdminData(res.data.adminData);
     } catch (err) {
       console.error("Error fetching user information:", err);
     }
@@ -60,32 +64,6 @@ export const useGrabUserInformation = () => {
 
   return fetchData; // Return the function so it can be called explicitly
 };
-
-// export const usePullTheDataIn = () => {
-//   const setUserInfo = useStore((e) => e.setUserInfo);
-//   const setFormInfo = useStore((e) => e.setFormInfo);
-//   const setQuestions = useStore((e) => e.setQuestions);
-//   const setEquipment = useStore((e) => e.setEquipment);
-//   const userIDfromCookie = cookie.parse(document.cookie).userID;
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const res = await axios.get(
-//           `${process.env.REACT_APP_BASE_URL}/user_data/${userIDfromCookie}`
-//         );
-//         setEquipment(res.data.equipment);
-//         setUserInfo(res.data.user);
-//         setFormInfo(res.data.form);
-//         setQuestions(res.data.form[0].formQuestions);
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     };
-
-//     fetchData();
-//   }, [setEquipment, setQuestions, setFormInfo, setUserInfo]);
-// };
 
 // Custom hook for User Login
 export const useLoginUser = () => {
@@ -110,6 +88,7 @@ export const useLoginUser = () => {
         "userID",
         response.data.user.user_id
       );
+      // console.log(response.data);
       // Set the cookie in the document
       document.cookie = serializedCookie;
       setUserInfo(response.data.user);

@@ -6,28 +6,25 @@ import {
   personCircleOutline,
   settingsOutline,
   notificationsOutline,
+  serverOutline,
 } from "ionicons/icons";
 
-// import { Settings } from "./Settings";
-// import { Notifications } from "./Notifications";
-// import { Profile } from "./Profile";
 import { useHistory } from "react-router-dom";
 import white from "../../images/logo/white.png";
-// import { Redirect, Route } from "react-router-dom";
-// import { IonReactRouter } from "@ionic/react-router";
+import { useStore } from "../../state/store";
 
-// import { Button } from "antd";
 export const Header = () => {
+  const userData = useStore((state) => state.userInfo);
+
   const history = useHistory();
-  const handleLogOut = (e) => {
-    //route to signup page
-    // logUserOut();
-  };
+  const handleLogOut = (e) => {};
   const [showDrawer, setShowDrawer] = useState(false);
 
   const toggleDrawer = () => {
     setShowDrawer(!showDrawer);
   };
+
+  // console.log(userData);
 
   //version 2 of this app. see below html to remember what you were doing here. (dynamic drawer displays.)
   const handleClick = (e) => {
@@ -49,12 +46,23 @@ export const Header = () => {
       <div className="app-header">
         <img src={white} alt="logo" width={"140px"} />
         <div className="header-icon-group">
+          {userData.role_id === 69 && (
+            <div className="header-icon-ind">
+              <IonButton onClick={(e) => history.push("admin")} fill="clear">
+                <IonIcon
+                  aria-hidden="true"
+                  icon={serverOutline}
+                  // size="large"
+                  className="header-icon"
+                />
+              </IonButton>
+            </div>
+          )}
           <div className="header-icon-ind">
             <IonButton onClick={(e) => history.push("profile")} fill="clear">
               <IonIcon
                 aria-hidden="true"
                 icon={personCircleOutline}
-                // size="large"
                 className="header-icon"
               />
             </IonButton>
