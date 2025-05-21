@@ -119,13 +119,16 @@ export const Forms = () => {
     var userID;
     var orgID;
     var formTemplateID;
+    var organization;
 
     formData.forEach((e, idx) => {
       if (e.data.form_id === selectedForm) {
+        console.log(e);
         formTitle = e.data.form_title;
         formType = e.data.form_type;
         userID = e.data.user_id;
         orgID = e.data.organization_id;
+        organization = e.userInfo.organization;
         formTemplateID = e.data.form_template_id;
         // console.log(e);
         const { formQuestions } = e;
@@ -153,6 +156,7 @@ export const Forms = () => {
       form_type: formType,
       user_id: cookieUserID,
       organization_id: orgID,
+      organization: organization,
       form_template_id: formTemplateID,
       created_at: moment().toISOString(),
       questions: questionArr,
