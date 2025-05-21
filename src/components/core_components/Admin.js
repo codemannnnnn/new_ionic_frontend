@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Card, Button, Modal, Form, Input, Select } from "antd";
 import { createStyles } from "antd-style";
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, IonButton } from "@ionic/react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useStore, useGrabUserInformation } from "../../state/store";
@@ -70,14 +70,7 @@ const AdminActions = ({ fetchData, adminData }) => {
     setOrgToState();
   }, [adminData]);
 
-  //   console.log(listOfOrgs);
-
   const postAdminData = (body, type) => {
-    // const cookie = require("cookie");
-    // const cookies = cookie.parse(document.cookie);
-    // const token = cookies.token;
-    // console.log(token);
-    // const postBody = {};
     const axiosPost = async (endpoint, body) => {
       const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -95,7 +88,7 @@ const AdminActions = ({ fetchData, adminData }) => {
         organization: body.organization,
         organization_id: body.organization_id,
         role_id: 2, // hardcoded for now (operators.)
-        //created_at
+        role: "Operator",
       };
       axiosPost("auth/register", postBody);
       fetchData();
@@ -105,29 +98,78 @@ const AdminActions = ({ fetchData, adminData }) => {
   //create user section
   const [createUserOpen, setCreateUserOpen] = useState(false);
   const [createUserLoading, setCreateUserLoading] = useState(false);
+  const [addOrg, setAddOrg] = useState(true);
+  const [selectOrg, setSelectOrg] = useState(false);
+  const [showCreateOrgButton, setShowCreateOrgButton] = useState(true);
+  const [nextAvailableOrg, setNextAvailableOrg] = useState("");
   const [createUserForm] = Form.useForm();
-
+  const handleCreateNewOrg = () => {
+    const fetchNextOrgId = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/users/latestOrganizationId`
+        );
+        const nextOrgId = response.data; // Adjust based on the API response structure
+        setNextAvailableOrg(nextOrgId);
+        console.log(nextOrgId);
+      } catch (error) {
+        console.error("Error fetching next organization ID:", error);
+      }
+    };
+    fetchNextOrgId();
+    console.log(nextAvailableOrg);
+    createUserForm.setFieldsValue({
+      organization_id: nextAvailableOrg,
+    });
+    setShowCreateOrgButton(false);
+    setAddOrg(false);
+    setSelectOrg(true);
+  };
   const handleCreateUserOpen = () => {
     setCreateUserOpen(true);
   };
 
   const handleCreateUserOk = () => {
     const values = createUserForm.getFieldsValue();
+    const organizationFinder = listOfOrgs.find(
+      (org) => org.value === values.organization_select
+    );
+    const organization =
+      organizationFinder && organizationFinder.label
+        ? organizationFinder.label
+        : values.organization;
+    // console.log(organization.label);
     setCreateUserLoading(true);
-
-    postAdminData(values, "user");
+    // console.log(values);
+    // console.log(listOfOrgs);
+    const postBody = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: values.password,
+      organization: organization,
+      organization_id:
+        values.organization_select || Object.values(nextAvailableOrg)[0],
+    };
+    // console.log(postBody);
+    postAdminData(postBody, "user");
 
     setCreateUserOpen(false);
     setCreateUserLoading(false);
+    setAddOrg(true);
+    setSelectOrg(false);
+    setShowCreateOrgButton(true);
+
     createUserForm.resetFields();
-    // setTimeout(() => {
-    //   setRefreshUserGrid(true);
-    // }, 500);
   };
   const handleCreateUserCancel = () => {
     // console.log("Create User Cancel button clicked");
     setCreateUserOpen(false);
     setCreateUserLoading(false);
+    setAddOrg(true);
+    setSelectOrg(false);
+    setShowCreateOrgButton(true);
+
     createUserForm.resetFields();
   };
 
@@ -321,25 +363,34 @@ const AdminActions = ({ fetchData, adminData }) => {
             >
               <Input placeholder="Password" />
             </Form.Item>
-            <Form.Item
-              name="organization"
-              //   label="Organization"
-              rules={[
-                { required: true, message: "Please enter the organization" },
-              ]}
-            >
-              <Input placeholder="Organization" />
+
+            <Form.Item name="organization_select" hidden={selectOrg}>
+              <Select
+                placeholder="Select Organization"
+                options={listOfOrgs}
+                onSelect={() => {
+                  setShowCreateOrgButton(false);
+                }}
+              />
             </Form.Item>
 
             <Form.Item
-              name="organization_id"
-              //   label="Organization"
+              name="organization"
+              hidden={addOrg}
               rules={[
-                { required: true, message: "Please enter the organization ID" },
+                {
+                  required: true,
+                  message: "Please enter an organization name.",
+                },
               ]}
             >
-              <Input placeholder="Organization ID" />
+              <Input placeholder="Organization Name" />
             </Form.Item>
+            {showCreateOrgButton && (
+              <Button onClick={handleCreateNewOrg}>
+                Create New Organization
+              </Button>
+            )}
           </Form>
         </Modal>
         <Modal
@@ -349,27 +400,9 @@ const AdminActions = ({ fetchData, adminData }) => {
           confirmLoading={formLoading}
           onCancel={handleCreateFormCancel}
         >
-          <Form
-            form={createNewForm}
-            layout="vertical"
-            name="form_in_modal"
-            // initialValues={{
-            //   modifier: "public",
-            // }}
-          >
+          <Form form={createNewForm} layout="vertical" name="form_in_modal">
             <Form.Item name="organization">
-              <Select
-                // status={selectValidation}
-
-                placeholder="Select Organization"
-                style={
-                  {
-                    //   width: 240,
-                  }
-                }
-                // onChange={handleInputChanges}
-                options={listOfOrgs}
-              />
+              <Select placeholder="Select Organization" options={listOfOrgs} />
             </Form.Item>
             <Form.Item
               style={{ marginTop: "20px" }}
@@ -490,7 +523,6 @@ const UsersPanel = ({ adminData, fetchData }) => {
         organization_id: user.organization_id,
         role: user.role,
         role_id: user.role_id,
-
         username: user.email,
         temp_password: user.temp_password,
         created_at: moment(user.created_at).format("MM-DD-YYYY"),
